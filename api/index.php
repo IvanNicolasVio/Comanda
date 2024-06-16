@@ -1,32 +1,21 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once '../api/clases/empleado.php';
+require_once '../api/controllers/EmpleadoController.php';
+require_once '../api/middleware/CheckRolMW.php';
+require_once '../api/middleware/issetMW.php';
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
+use Slim\Routing\RouteCollectorProxy;
 
 $app = AppFactory::create();
 
-$app->get('/', function (Request $request, Response $response, array $args) {
-    $response->getBody()->write("Funciona!");
-    return $response;
-});
-
-$app->get("/usuarios", function(Request $request, Response $response, $args) {
-    $params = $request->getQueryParams();
-   
-    $response->getBody()->write(json_encode($params));
-
-    return $response;
-});
-
-$app->get("/empleado", function(Request $request, Response $response, $args) {
-    $params = $request->getQueryParams();
-    Empleado::CrearEmpleado($params);
-    $response->getBody()->write(json_encode($params));
-    return $response;
+$app->group('/empleado', function(RouteCollectorProxy $group){
+    $group->post('/crear',\EmpleadoController::class . ':crear')
+        ->add(new CheckRolMW())
+        ->add(new issetMW());
 });
 
 

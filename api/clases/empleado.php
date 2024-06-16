@@ -33,16 +33,9 @@ class Empleado{
     }
 
     public static function CrearEmpleado($params){
-        $nombre = isset($params['nombre']) ? $params['nombre'] : null;
-        $contrasenia = isset($params['contrasenia']) ? $params['contrasenia'] : null;
-        $funcion = isset($params['funcion']) ? $params['funcion'] : null;
-        if(Validador::ValidarFuncion($funcion)){
-            $empleado = new Empleado($nombre,$contrasenia,$funcion);
-            $empleado->DarAlta();
-            return $empleado;
-        }else{
-            return false;
-        }
+        $empleado = new Empleado($params['nombre'],$params['contrasenia'],$params['funcion']);
+        $empleado->DarAlta();
+        return $empleado;
     }
     public static function DarBaja(){
 

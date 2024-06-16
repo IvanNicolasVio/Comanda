@@ -6,10 +6,9 @@ class Fecha
     {
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $fechaFormateada = date_create("now");
-        $fechaFormateada = date_format($fechaFormateada, 'd-m-Y');
+        $fechaFormateada = date_format($fechaFormateada, 'Y-m-d');
         return $fechaFormateada;
     }
-
 }
 
 ?>
