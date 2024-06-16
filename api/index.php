@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once '../api/controllers/EmpleadoController.php';
+require_once '../api/controllers/MesaController.php';
 require_once '../api/middleware/CheckRolMW.php';
 require_once '../api/middleware/issetMW.php';
 
@@ -15,7 +16,11 @@ $app = AppFactory::create();
 $app->group('/empleado', function(RouteCollectorProxy $group){
     $group->post('/crear',\EmpleadoController::class . ':crear')
         ->add(new CheckRolMW())
-        ->add(new issetMW());
+        ->add(new issetMW('usuario'));
+});
+
+$app->group('/mesas', function(RouteCollectorProxy $group){
+    $group->post('/crear',\MesaController::class . ':crear');
 });
 
 

@@ -1,6 +1,5 @@
 <?php
 
-include_once './clases/Validador.php';
 include_once './db/AccesoDatos.php';
 include_once './clases/ControlTiempo.php';
 
@@ -37,6 +36,7 @@ class Empleado{
         $empleado->DarAlta();
         return $empleado;
     }
+    
     public static function DarBaja(){
 
     }
