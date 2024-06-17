@@ -37,6 +37,7 @@ $app->group('/productos', function(RouteCollectorProxy $group){
     $group->post('/crear',\ProductoController::class . ':crear')
     ->add(new CheckSectorMW())
     ->add(new issetMW('producto'));
+    $group->get('/traerTodos',\ProductoController::class . ':TraerTodos');
 });
 $app->group('/pedidos', function(RouteCollectorProxy $group){
     $group->post('/tomar',\PedidoController::class . ':crear')

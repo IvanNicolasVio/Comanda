@@ -11,4 +11,11 @@ class ProductoController {
         $response->getBody()->write(json_encode(array('Status'=>$producto->nombre . ' dado de alta con exito!')));
         return $response;
     }
+
+    public function TraerTodos(Request $request, Response $response, $args) {
+        $productos = Producto::MostrarProductos();
+        $productos = json_encode($productos);
+        $response->getBody()->write($productos);
+        return $response;
+    }
 }

@@ -39,4 +39,17 @@ class Producto{
             return false;
         }
     }
+
+    public static function MostrarProductos(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM productos");
+        $consulta->execute();
+        $productos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($productos) {
+            return $productos;
+        } else {
+            return false;
+        }
+    }
+
 }
