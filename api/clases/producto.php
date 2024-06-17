@@ -1,17 +1,29 @@
 <?php
 
-include_once '../db/AccesoDatos.php';
+include_once './db/AccesoDatos.php';
 
 class Producto{
-    public $id;
     public $nombre;
-    public $tipo;
-    public $tiempo_estimado;
+    public $sector;
 
-    public function __construct($nombre,$tipo,$tiempo_estimado)
+    public function __construct($nombre,$sector)
     {
         $this->nombre = $nombre;
-        $this->tipo = $tipo;
-        $this->tiempo_estimado = $tiempo_estimado;
+        $this->sector = $sector;
+    }
+
+    public function DarAlta(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into productos (nombre,sector)values(:nombre,:sector)");
+        $consulta->bindValue(':nombre', $this->nombre, PDO::PARAM_STR);
+        $consulta->bindValue(':sector', $this->sector, PDO::PARAM_STR);
+        $consulta->execute();
+        return $objetoAccesoDato->RetornarUltimoIdInsertado();
+    }
+
+    public static function CrearProducto($params){
+        $mesa = new Producto($params['nombre'],$params['sector']);
+        $mesa->DarAlta();
+        return $mesa;
     }
 }

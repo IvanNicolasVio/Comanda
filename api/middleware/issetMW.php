@@ -25,6 +25,28 @@ class issetMW{
                 $response->getBody()->write(json_encode(array('ERROR!'=>'PARAMETROS EQUIVOCADOS')));
             }
             return $response;
+        }elseif($this->tipo == 'producto'){
+            if(isset($params['nombre']) && isset($params['sector']))
+            {
+                $response = $handler->handle($request);
+            }
+            else
+            {
+                $response = new Response();
+                $response->getBody()->write(json_encode(array('ERROR!'=>'PARAMETROS EQUIVOCADOS')));
+            }
+            return $response;
+        }elseif($this->tipo == 'pedido'){
+            if(isset($params['mesa']))
+            {
+                $response = $handler->handle($request);
+            }
+            else
+            {
+                $response = new Response();
+                $response->getBody()->write(json_encode(array('ERROR!'=>'PARAMETROS EQUIVOCADOS')));
+            }
+            return $response;
         }
         
     }

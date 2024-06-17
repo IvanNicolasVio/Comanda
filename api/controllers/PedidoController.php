@@ -1,0 +1,17 @@
+<?php
+
+include_once './clases/pedido.php';
+include_once './controllers/MesaController.php';
+
+use Slim\Psr7\Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
+class PedidoController {
+    public function crear(Request $request, Response $response, $args) {
+        $params = $request->getParsedBody();
+        $numeroPedido = Pedido::Cargar($params);
+        MesaController::Actualizar($params);
+        $response->getBody()->write(json_encode(array('Status'=> 'Pedido numero: ' . $numeroPedido . ' cargado con exito')));
+        return $response;
+    }
+}

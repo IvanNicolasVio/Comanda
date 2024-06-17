@@ -28,4 +28,12 @@ class Mesa{
         return $mesa;
     }
 
+    public static function CambiarEstado($codigoMesa,$estado){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("UPDATE mesas SET estado = :estado WHERE codigo = :codigo");
+        $consulta->bindValue(':codigo', $codigoMesa, PDO::PARAM_STR);
+        $consulta->bindValue(':estado', $estado, PDO::PARAM_STR);
+        $consulta->execute();
+    }
+
 }
