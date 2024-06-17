@@ -22,7 +22,7 @@ class issetMW{
             else
             {
                 $response = new Response();
-                $response->getBody()->write(json_encode(array('ERROR!'=>'PARAMETROS EQUIVOCADOS')));
+                $response->getBody()->write(json_encode(array('Error!'=>'Parametros equivocados')));
             }
             return $response;
         }elseif($this->tipo == 'producto'){
@@ -33,7 +33,7 @@ class issetMW{
             else
             {
                 $response = new Response();
-                $response->getBody()->write(json_encode(array('ERROR!'=>'PARAMETROS EQUIVOCADOS')));
+                $response->getBody()->write(json_encode(array('Error!'=>'Parametros equivocados')));
             }
             return $response;
         }elseif($this->tipo == 'pedido'){
@@ -44,7 +44,7 @@ class issetMW{
             else
             {
                 $response = new Response();
-                $response->getBody()->write(json_encode(array('ERROR!'=>'PARAMETROS EQUIVOCADOS')));
+                $response->getBody()->write(json_encode(array('Error!'=>'Parametros equivocados')));
             }
             return $response;
         }

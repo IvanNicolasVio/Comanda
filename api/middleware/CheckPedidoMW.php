@@ -12,6 +12,8 @@ class CheckPedidoMW{
         $pedido = $params['pedido'];
         $data_array = json_decode($pedido, true);
         $banderaExiste = false;
+        $banderaId = false;
+        $banderaCantidad = false;
         if (is_array($data_array) && !empty($data_array)) {
             foreach ($data_array as $item) {
                 if (isset($item['id_producto']) && isset($item['cantidad'])) {
@@ -20,10 +22,12 @@ class CheckPedidoMW{
                             $banderaExiste = true;
                         }else{
                             $banderaExiste = false;
+                            $banderaCantidad = true;
                             break;
                         }
                     }else{
                         $banderaExiste = false;
+                        $banderaId = true;
                         break;
                     }
                 }
@@ -33,12 +37,24 @@ class CheckPedidoMW{
         if($banderaExiste)
         {
             $response = $handler->handle($request);
+        }else{
+            if($banderaId)
+            {
+                $response = new Response();
+                $response->getBody()->write(json_encode(array('Error!'=>'Producto incorrecto')));
+            }elseif($banderaCantidad)
+            {
+                $response = new Response();
+                $response->getBody()->write(json_encode(array('Error!'=>'Cantidad incorrecta')));
+            }
+            else
+            {
+                $response = new Response();
+                $response->getBody()->write(json_encode(array('Error!'=>'Pedido incorrecto')));
+            }
         }
-        else
-        {
-            $response = new Response();
-            $response->getBody()->write(json_encode(array('ERROR!'=>'PEDIDO INCORRECTO')));
-        }
+        
+        
         return $response;
     }
 }

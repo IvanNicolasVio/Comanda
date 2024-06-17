@@ -18,7 +18,7 @@ class CheckMesaMW{
             $response = $handler->handle($request);
         } else {
             $response = new Response();
-            $response->getBody()->write(json_encode(array('ERROR!' => 'Mesa no encontrada')));
+            $response->getBody()->write(json_encode(array('Error!' => 'Mesa no encontrada')));
         }
         return $response;
     }

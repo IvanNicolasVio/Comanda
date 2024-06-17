@@ -15,7 +15,7 @@ class CheckRolMW{
         else
         {
             $response = new Response();
-            $response->getBody()->write(json_encode(array('ERROR!'=>'FUNCION INEXISTENTE')));
+            $response->getBody()->write(json_encode(array('Error!'=>'Funcion inexistente')));
         }
         return $response;
     }

@@ -15,7 +15,7 @@ class CheckSectorMW{
         else
         {
             $response = new Response();
-            $response->getBody()->write(json_encode(array('ERROR!'=>'SECTOR INEXISTENTE')));
+            $response->getBody()->write(json_encode(array('Error!'=>'Sector inexistente')));
         }
         return $response;
     }
