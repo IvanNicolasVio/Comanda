@@ -37,7 +37,7 @@ class issetMW{
             }
             return $response;
         }elseif($this->tipo == 'pedido'){
-            if(isset($params['mesa']))
+            if(isset($params['mesa']) && isset($params['nombre']))
             {
                 $response = $handler->handle($request);
             }

@@ -8,6 +8,7 @@ require_once '../api/controllers/PedidoController.php';
 require_once '../api/middleware/CheckMesaMW.php';
 require_once '../api/middleware/CheckRolMW.php';
 require_once '../api/middleware/CheckSectorMW.php';
+require_once '../api/middleware/CheckPedidoMW.php';
 require_once '../api/middleware/issetMW.php';
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -35,6 +36,7 @@ $app->group('/producto', function(RouteCollectorProxy $group){
 
 $app->group('/pedido', function(RouteCollectorProxy $group){
     $group->post('/tomar',\PedidoController::class . ':crear')
+    ->add(new CheckPedidoMW())
     ->add(new CheckMesaMW())
     ->add(new issetMW('pedido'));
 });
