@@ -31,4 +31,28 @@ class Pedido{
         }
         return $pedido->codigo;
     }
+
+    public static function MostrarPedidos(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM pedidos");
+        $consulta->execute();
+        $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($pedidos) {
+            return $pedidos;
+        } else {
+            return false;
+        }
+    }
+
+    public static function MostrarPendientes(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM pedidos WHERE estado = 'pendiente' ");
+        $consulta->execute();
+        $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($pedidos) {
+            return $pedidos;
+        } else {
+            return false;
+        }
+    }
 }

@@ -14,4 +14,18 @@ class PedidoController {
         $response->getBody()->write(json_encode(array('Status'=> 'Pedido numero: ' . $numeroPedido . ' cargado con exito')));
         return $response;
     }
+
+    public function TraerTodos(Request $request, Response $response, $args) {
+        $pedidos = Pedido::MostrarPedidos();
+        $pedidos = json_encode($pedidos);
+        $response->getBody()->write($pedidos);
+        return $response;
+    }
+
+    public function TraerPendientes(Request $request, Response $response, $args) {
+        $pedidos = Pedido::MostrarPendientes();
+        $pedidos = json_encode($pedidos);
+        $response->getBody()->write($pedidos);
+        return $response;
+    }
 }

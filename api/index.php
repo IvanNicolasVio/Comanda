@@ -44,6 +44,8 @@ $app->group('/pedidos', function(RouteCollectorProxy $group){
     ->add(new CheckPedidoMW())
     ->add(new CheckMesaMW())
     ->add(new issetMW('pedido'));
+    $group->get('/traerTodos',\PedidoController::class . ':TraerTodos');
+    $group->get('/traerPendientes',\PedidoController::class . ':TraerPendientes');
 });
 
 
