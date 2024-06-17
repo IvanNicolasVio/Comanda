@@ -37,7 +37,40 @@ class Empleado{
         return $empleado;
     }
     
-    public static function DarBaja(){
+    public static function MostrarEmpleados(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM empleados");
+        $consulta->execute();
+        $empleados = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($empleados) {
+            return $empleados;
+        } else {
+            return false;
+        }
+    }
 
+    public static function MostrarEmpleadosAlta(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM empleados WHERE fecha_baja = 0 ");
+        $consulta->execute();
+        $empleados = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($empleados) {
+            return $empleados;
+        } else {
+            return false;
+        }
+    }
+
+    public static function MostrarEmpleadosXFuncion($funcion){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM empleados WHERE funcion = ? ");
+        $consulta->bindValue(1, $funcion, PDO::PARAM_STR);
+        $consulta->execute();
+        $empleados = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($empleados) {
+            return $empleados;
+        } else {
+            return false;
+        }
     }
 }

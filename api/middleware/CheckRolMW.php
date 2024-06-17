@@ -6,7 +6,7 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 class CheckRolMW{
 
     public function __invoke(Request $request, RequestHandler $handler){
-        $params = $request->getParsedBody();
+        $params = $request->getMethod() === 'POST' ? $request->getParsedBody() : $request->getQueryParams();
 
         if($params['funcion'] === 'Bartender' || $params['funcion'] === 'Cervecero' || $params['funcion'] === 'Cocinero' || $params['funcion'] === 'Mozo' || $params['funcion'] === 'Socio')
         {

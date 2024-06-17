@@ -18,23 +18,24 @@ use Slim\Routing\RouteCollectorProxy;
 
 $app = AppFactory::create();
 
-$app->group('/empleado', function(RouteCollectorProxy $group){
+$app->group('/empleados', function(RouteCollectorProxy $group){
     $group->post('/crear',\EmpleadoController::class . ':crear')
         ->add(new CheckRolMW())
         ->add(new issetMW('usuario'));
+    $group->get('/traerTodos',\EmpleadoController::class . ':TraerTodos');
+    $group->get('/traerAltas',\EmpleadoController::class . ':TraerAltas');
+    $group->get('/traerPorFuncion',\EmpleadoController::class . ':TraerPorFuncion')
+        ->add(new CheckRolMW());
 });
-
 $app->group('/mesas', function(RouteCollectorProxy $group){
     $group->post('/crear',\MesaController::class . ':crear');
 });
-
-$app->group('/producto', function(RouteCollectorProxy $group){
+$app->group('/productos', function(RouteCollectorProxy $group){
     $group->post('/crear',\ProductoController::class . ':crear')
     ->add(new CheckSectorMW())
     ->add(new issetMW('producto'));
 });
-
-$app->group('/pedido', function(RouteCollectorProxy $group){
+$app->group('/pedidos', function(RouteCollectorProxy $group){
     $group->post('/tomar',\PedidoController::class . ':crear')
     ->add(new CheckPedidoMW())
     ->add(new CheckMesaMW())

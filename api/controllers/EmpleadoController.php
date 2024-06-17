@@ -11,4 +11,26 @@ class EmpleadoController {
         $response->getBody()->write(json_encode(array('Status'=>$empleado->nombre . ' dado de alta con exito!')));
         return $response;
     }
+
+    public function TraerTodos(Request $request, Response $response, $args) {
+        $empleados = Empleado::MostrarEmpleados();
+        $empleados = json_encode($empleados);
+        $response->getBody()->write($empleados);
+        return $response;
+    }
+
+    public function TraerAltas(Request $request, Response $response, $args) {
+        $empleados = Empleado::MostrarEmpleadosAlta();
+        $empleados = json_encode($empleados);
+        $response->getBody()->write($empleados);
+        return $response;
+    }
+
+    public function TraerPorFuncion(Request $request, Response $response, $args) {
+        $params = $request->getQueryParams();
+        $empleados = Empleado::MostrarEmpleadosXFuncion($params['funcion']);
+        $empleados = json_encode($empleados);
+        $response->getBody()->write($empleados);
+        return $response;
+    }
 }
