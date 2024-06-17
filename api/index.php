@@ -29,6 +29,9 @@ $app->group('/empleados', function(RouteCollectorProxy $group){
 });
 $app->group('/mesas', function(RouteCollectorProxy $group){
     $group->post('/crear',\MesaController::class . ':crear');
+    $group->get('/traerTodas',\MesaController::class . ':TraerTodas');
+    $group->get('/traerSinUso',\MesaController::class . ':TraerSinUso');
+    $group->get('/traerEnUso',\MesaController::class . ':TraerEnUso');
 });
 $app->group('/productos', function(RouteCollectorProxy $group){
     $group->post('/crear',\ProductoController::class . ':crear')

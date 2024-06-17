@@ -10,7 +10,7 @@ class Mesa{
     public function __construct()
     {
         $this->codigo = substr(bin2hex(random_bytes(5)), 0, 5);
-        $this->estado = "";
+        $this->estado = "cerrada";
     }
 
     public function DarAlta(){
@@ -34,6 +34,42 @@ class Mesa{
         $consulta->bindValue(':codigo', $codigoMesa, PDO::PARAM_STR);
         $consulta->bindValue(':estado', $estado, PDO::PARAM_STR);
         $consulta->execute();
+    }
+
+    public static function MostrarMesas(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM mesas");
+        $consulta->execute();
+        $empleados = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($empleados) {
+            return $empleados;
+        } else {
+            return false;
+        }
+    }
+
+    public static function MostrarSinUso(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM mesas WHERE estado = 'cerrada' ");
+        $consulta->execute();
+        $mesas = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($mesas) {
+            return $mesas;
+        } else {
+            return false;
+        }
+    }
+
+    public static function MostrarEnUso(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM mesas WHERE estado != 'cerrada' ");
+        $consulta->execute();
+        $mesas = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($mesas) {
+            return $mesas;
+        } else {
+            return false;
+        }
     }
 
 }

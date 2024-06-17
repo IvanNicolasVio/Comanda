@@ -16,4 +16,25 @@ class MesaController {
         $estado = 'con cliente esperando pedido';
         Mesa::CambiarEstado($codigoMesa,$estado);
     }
+
+    public function TraerTodas(Request $request, Response $response, $args) {
+        $mesas = Mesa::MostrarMesas();
+        $mesas = json_encode($mesas);
+        $response->getBody()->write($mesas);
+        return $response;
+    }
+
+    public function TraerSinUso(Request $request, Response $response, $args) {
+        $mesas = Mesa::MostrarSinUso();
+        $mesas = json_encode($mesas);
+        $response->getBody()->write($mesas);
+        return $response;
+    }
+    
+    public function TraerEnUso(Request $request, Response $response, $args) {
+        $mesas = Mesa::MostrarEnUso();
+        $mesas = json_encode($mesas);
+        $response->getBody()->write($mesas);
+        return $response;
+    }
 }
