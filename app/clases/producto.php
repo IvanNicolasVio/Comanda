@@ -5,24 +5,27 @@ include_once './db/AccesoDatos.php';
 class Producto{
     public $nombre;
     public $sector;
+    public $valor;
 
-    public function __construct($nombre,$sector)
+    public function __construct($nombre,$sector,$valor)
     {
         $this->nombre = $nombre;
         $this->sector = $sector;
+        $this->valor = $valor;
     }
 
     public function DarAlta(){
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into productos (nombre,sector)values(:nombre,:sector)");
+        $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into productos (nombre,sector,valor)values(:nombre,:sector,:valor)");
         $consulta->bindValue(':nombre', $this->nombre, PDO::PARAM_STR);
         $consulta->bindValue(':sector', $this->sector, PDO::PARAM_STR);
+        $consulta->bindValue(':valor', $this->valor, PDO::PARAM_STR);
         $consulta->execute();
         return $objetoAccesoDato->RetornarUltimoIdInsertado();
     }
 
     public static function CrearProducto($params){
-        $mesa = new Producto($params['nombre'],$params['sector']);
+        $mesa = new Producto($params['nombre'],$params['sector'],$params['valor']);
         $mesa->DarAlta();
         return $mesa;
     }
@@ -51,5 +54,7 @@ class Producto{
             return false;
         }
     }
+
+    
 
 }

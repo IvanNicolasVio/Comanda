@@ -1,15 +1,15 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once '../api/controllers/EmpleadoController.php';
-require_once '../api/controllers/MesaController.php';
-require_once '../api/controllers/ProductoController.php';
-require_once '../api/controllers/PedidoController.php';
-require_once '../api/middleware/CheckMesaMW.php';
-require_once '../api/middleware/CheckRolMW.php';
-require_once '../api/middleware/CheckSectorMW.php';
-require_once '../api/middleware/CheckPedidoMW.php';
-require_once '../api/middleware/issetMW.php';
+require_once '../app/controllers/EmpleadoController.php';
+require_once '../app/controllers/MesaController.php';
+require_once '../app/controllers/ProductoController.php';
+require_once '../app/controllers/PedidoController.php';
+require_once '../app/middleware/CheckMesaMW.php';
+require_once '../app/middleware/CheckRolMW.php';
+require_once '../app/middleware/CheckSectorMW.php';
+require_once '../app/middleware/CheckPedidoMW.php';
+require_once '../app/middleware/issetMW.php';
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -25,7 +25,8 @@ $app->group('/empleados', function(RouteCollectorProxy $group){
     $group->get('/traerTodos',\EmpleadoController::class . ':TraerTodos');
     $group->get('/traerAltas',\EmpleadoController::class . ':TraerAltas');
     $group->get('/traerPorFuncion',\EmpleadoController::class . ':TraerPorFuncion')
-        ->add(new CheckRolMW());
+        ->add(new CheckRolMW())
+        ->add(new issetMW('funcion'));
 });
 $app->group('/mesas', function(RouteCollectorProxy $group){
     $group->post('/crear',\MesaController::class . ':crear');

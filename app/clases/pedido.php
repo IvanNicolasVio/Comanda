@@ -1,14 +1,17 @@
 <?php
 
 include_once './db/AccesoDatos.php';
+include_once './clases/ControlTiempo.php';
+include_once './clases/producto.php';
 
 class Pedido{
     public $codigo;
+    public $fechaPedido;
     
-
     public function __construct()
     {
         $this->codigo = substr(bin2hex(random_bytes(5)), 0, 5);;
+        $this->fechaPedido = Fecha::DarFechaConHora();
     }
 
     public static function Cargar($params){
@@ -19,14 +22,18 @@ class Pedido{
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         $data_array = json_decode($productos, true);
         foreach ($data_array as $item) {
-            $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into pedidos (codigo,nombre,id_mesa,id_producto,cantidad,estado,tiempo)values(:codigo,:nombre,:id_mesa,:id_producto,:cantidad,:estado,:tiempo)");
+            $precioProducto = Producto::ValidarProducto($item['id_producto']);
+            $precioProducto = $precioProducto['valor'];
+            $valorTotal = $precioProducto * $item['cantidad'];
+            $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into pedidos (codigo,codigo_mesa,nombre,id_producto,cantidad,estado,valor_total,fecha_pedido)values(:codigo,:codigo_mesa,:nombre,:id_producto,:cantidad,:estado,:valor_total,:fecha_pedido)");
             $consulta->bindValue(':codigo', $pedido->codigo, PDO::PARAM_STR);
+            $consulta->bindValue(':codigo_mesa', $codigo_mesa, PDO::PARAM_STR);
             $consulta->bindValue(':nombre', $nombre_cliente, PDO::PARAM_STR);
-            $consulta->bindValue(':id_mesa', $codigo_mesa, PDO::PARAM_STR);
             $consulta->bindValue(':id_producto', $item['id_producto'], PDO::PARAM_INT);
             $consulta->bindValue(':cantidad', $item['cantidad'], PDO::PARAM_INT);
             $consulta->bindValue(':estado', 'pendiente', PDO::PARAM_STR);
-            $consulta->bindValue(':tiempo',null);
+            $consulta->bindValue(':valor_total', $valorTotal, PDO::PARAM_INT);
+            $consulta->bindValue(':fecha_pedido', $pedido->fechaPedido);
             $consulta->execute();
         }
         return $pedido->codigo;
