@@ -62,4 +62,40 @@ class Pedido{
             return false;
         }
     }
+
+    public static function obtenerPedidosPorFuncion($funcion){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        switch($funcion){
+            case 'Cocinero':
+                $sentencia = " WHERE pr.sector = 'candybar' OR pr.sector = 'cocina' AND ";
+                break;
+
+            case 'Bartender':
+                $sentencia = " WHERE pr.sector = 'barra' AND ";
+                break;
+
+            case 'Cervecero':
+                $sentencia = " WHERE pr.sector = 'chopera' AND ";
+                break;
+
+            case 'Socio':
+                $sentencia = " WHERE ";
+                break;
+        }
+
+        $sql = "SELECT p.codigo, p.codigo_mesa, p.id_producto, pr.nombre, p.cantidad, pr.sector 
+                FROM pedidos p INNER JOIN productos pr 
+                ON p.id_producto = pr.id" . $sentencia . "p.estado = 'pendiente'";
+
+        $consulta = $objetoAccesoDato->RetornarConsulta($sql);
+        $consulta->execute();
+        $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($pedidos) > 0) {
+            return $pedidos;
+        } else {
+            return array('Status' => 'No hay pedidos para la funcion especificada');
+        }
+
+    }
 }

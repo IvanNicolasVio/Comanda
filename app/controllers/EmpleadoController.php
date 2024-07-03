@@ -1,5 +1,6 @@
 <?php
 include_once './clases/empleado.php';
+include_once './clases/AutenticadorJWT.php';
 
 use Slim\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -31,6 +32,20 @@ class EmpleadoController {
         $empleados = Empleado::MostrarEmpleadosXFuncion($params['funcion']);
         $empleados = json_encode($empleados);
         $response->getBody()->write($empleados);
+        return $response;
+    }
+
+    public function Logearse(Request $request, Response $response, $args){
+        $params = $request->getQueryParams();
+        $usuario = $params['nombre'];
+        $contrasenia = $params['contrasenia'];
+        $empleado = Empleado::TraerEmpleadoPorUsuarioContraseña($usuario,$contrasenia);
+        if($empleado){
+            $data = AutentificadorJWT::CrearToken($empleado);
+            $response->getBody()->write($data);
+        }else{
+            $response->getBody()->write(json_encode(array('Status'=>'No existe el empleado')));
+        }
         return $response;
     }
 }

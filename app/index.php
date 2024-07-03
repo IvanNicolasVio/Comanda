@@ -10,6 +10,7 @@ require_once '../app/middleware/CheckRolMW.php';
 require_once '../app/middleware/CheckSectorMW.php';
 require_once '../app/middleware/CheckPedidoMW.php';
 require_once '../app/middleware/issetMW.php';
+require_once '../app/middleware/AuthMiddleware.php';
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -18,8 +19,13 @@ use Slim\Routing\RouteCollectorProxy;
 
 $app = AppFactory::create();
 
+$app->group('/log', function(RouteCollectorProxy $group){
+    $group->get('',\EmpleadoController::class . ':Logearse');
+});
+
 $app->group('/empleados', function(RouteCollectorProxy $group){
     $group->post('/crear',\EmpleadoController::class . ':crear')
+        ->add(new AuthMiddleware())
         ->add(new CheckRolMW())
         ->add(new issetMW('usuario'));
     $group->get('/traerTodos',\EmpleadoController::class . ':TraerTodos');
@@ -28,18 +34,21 @@ $app->group('/empleados', function(RouteCollectorProxy $group){
         ->add(new CheckRolMW())
         ->add(new issetMW('funcion'));
 });
+
 $app->group('/mesas', function(RouteCollectorProxy $group){
     $group->post('/crear',\MesaController::class . ':crear');
     $group->get('/traerTodas',\MesaController::class . ':TraerTodas');
     $group->get('/traerSinUso',\MesaController::class . ':TraerSinUso');
     $group->get('/traerEnUso',\MesaController::class . ':TraerEnUso');
 });
+
 $app->group('/productos', function(RouteCollectorProxy $group){
     $group->post('/crear',\ProductoController::class . ':crear')
     ->add(new CheckSectorMW())
     ->add(new issetMW('producto'));
     $group->get('/traerTodos',\ProductoController::class . ':TraerTodos');
 });
+
 $app->group('/pedidos', function(RouteCollectorProxy $group){
     $group->post('/tomar',\PedidoController::class . ':crear')
     ->add(new CheckPedidoMW())
@@ -47,6 +56,8 @@ $app->group('/pedidos', function(RouteCollectorProxy $group){
     ->add(new issetMW('pedido'));
     $group->get('/traerTodos',\PedidoController::class . ':TraerTodos');
     $group->get('/traerPendientes',\PedidoController::class . ':TraerPendientes');
+    $group->get('/mostrarPedidos',\PedidoController::class . ':TraerPorFuncion')
+    ->add(new issetMW('funcion'));
 });
 
 

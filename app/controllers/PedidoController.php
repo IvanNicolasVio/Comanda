@@ -1,6 +1,7 @@
 <?php
 
 include_once './clases/pedido.php';
+include_once './clases/empleado.php';
 include_once './controllers/MesaController.php';
 
 use Slim\Psr7\Response;
@@ -24,6 +25,14 @@ class PedidoController {
 
     public function TraerPendientes(Request $request, Response $response, $args) {
         $pedidos = Pedido::MostrarPendientes();
+        $pedidos = json_encode($pedidos);
+        $response->getBody()->write($pedidos);
+        return $response;
+    }
+
+    public function TraerPorFuncion(Request $request, Response $response, $args) {
+        $funcion = $request->getAttribute('funcion');
+        $pedidos = Pedido::obtenerPedidosPorFuncion($funcion);
         $pedidos = json_encode($pedidos);
         $response->getBody()->write($pedidos);
         return $response;

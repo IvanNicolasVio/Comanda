@@ -73,4 +73,18 @@ class Empleado{
             return false;
         }
     }
+
+    public static function TraerEmpleadoPorUsuarioContraseña($usuario,$contrasenia){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM empleados WHERE nombre = ? AND contrasenia = ? ");
+        $consulta->bindValue(1, $usuario, PDO::PARAM_STR);
+        $consulta->bindValue(2, $contrasenia, PDO::PARAM_STR);
+        $consulta->execute();
+        $empleado = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($empleado) {
+            return $empleado;
+        } else {
+            return false;
+        }
+    }
 }
