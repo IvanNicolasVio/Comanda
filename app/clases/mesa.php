@@ -72,4 +72,18 @@ class Mesa{
         }
     }
 
+    public static function MostrarUna($codigo,$estado){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM mesas WHERE estado = :estado  AND codigo = :codigo");
+        $consulta->bindValue(':estado', $estado, PDO::PARAM_STR);
+        $consulta->bindValue(':codigo', $codigo, PDO::PARAM_STR);
+        $consulta->execute();
+        $mesa = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($mesa) {
+            return $mesa;
+        } else {
+            return false;
+        }
+    }
+
 }

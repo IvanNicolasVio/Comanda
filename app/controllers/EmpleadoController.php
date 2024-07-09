@@ -14,6 +14,33 @@ class EmpleadoController {
         return $response;
     }
 
+    public function Modificar(Request $request, Response $response, $args) {
+        $params = $request->getQueryParams();
+        $nombre = $params['nombre'];
+        $funcion = $params['funcion'];
+        $empleado = Empleado::CheckNombre($nombre);
+        if($empleado){
+            Empleado::ModificarEmpleado($nombre,$funcion);
+            $response->getBody()->write(json_encode(array('Status'=>$empleado['nombre'] . ' modificado!')));
+        }else{
+            $response->getBody()->write(json_encode(array('Error!'=>$nombre . ' inexistente')));
+        }
+        return $response;
+    }
+
+    public function SoftDelete(Request $request, Response $response, $args) {
+        $params = $request->getQueryParams();
+        $nombre = $params['nombre'];
+        $empleado = Empleado::CheckNombre($nombre);
+        if($empleado){
+            Empleado::AgregarFechaBaja($nombre);
+            $response->getBody()->write(json_encode(array('Status'=>$empleado['nombre'] . ' dado de baja')));
+        }else{
+            $response->getBody()->write(json_encode(array('Error!'=>$nombre . ' inexistente')));
+        }
+        return $response;
+    }
+
     public function TraerTodos(Request $request, Response $response, $args) {
         $empleados = Empleado::MostrarEmpleados();
         $empleados = json_encode($empleados);
@@ -42,12 +69,20 @@ class EmpleadoController {
         $contrasenia = $params['contrasenia'];
         $empleado = Empleado::TraerEmpleadoPorUsuarioContraseña($usuario,$contrasenia);
         if($empleado){
-            $data = AutentificadorJWT::CrearToken($empleado);
-            $response->getBody()->write($data);
+            if($empleado['fecha_baja'] > 0){
+                $response = new Response();
+                $data = json_encode(array('Error!' => 'Dado de baja'));
+                $response->getBody()->write($data);
+
+            }else{
+                $data = AutentificadorJWT::CrearToken($empleado);
+                $response->getBody()->write($data);
+            }
+
         }else{
             $response->getBody()->write(json_encode(array('Status'=>'No existe el empleado')));
         }
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');;
     }
 
 }

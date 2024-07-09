@@ -3,65 +3,35 @@
 use Slim\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
-class issetMW{
 
-    private $tipo;
+class issetMW {
 
-    public function __construct($tipo)
+    private $parametrosACheck;
+
+    public function __construct(array $parametrosACheck)
     {
-        $this->tipo = $tipo;
+        $this->parametrosACheck = $parametrosACheck;
     }
-    public function __invoke(Request $request, RequestHandler $handler){
+
+    public function __invoke(Request $request, RequestHandler $handler) {
         $params = $request->getMethod() === 'POST' ? $request->getParsedBody() : $request->getQueryParams();
 
-        if($this->tipo == 'usuario'){
-            if(isset($params['nombre']) && isset($params['contrasenia']) && isset($params['funcion']))
-            {
-                $response = $handler->handle($request);
-            }
-            else
-            {
-                $response = new Response();
-                $response->getBody()->write(json_encode(array('Error!'=>'Parametros equivocados')));
-            }
-            return $response;
-
-        }elseif($this->tipo == 'producto'){
-            if(isset($params['nombre']) && isset($params['sector']) && isset($params['valor']))
-            {
-                $response = $handler->handle($request);
-            }
-            else
-            {
-                $response = new Response();
-                $response->getBody()->write(json_encode(array('Error!'=>'Parametros equivocados')));
-            }
-            return $response;
-
-        }elseif($this->tipo == 'pedido'){
-            if(isset($params['mesa']) && isset($params['nombre']))
-            {
-                $response = $handler->handle($request);
-            }
-            else
-            {
-                $response = new Response();
-                $response->getBody()->write(json_encode(array('Error!'=>'Parametros equivocados')));
-            }
-            return $response;
-
-        }elseif($this->tipo == 'funcion'){
-            if(isset($params['funcion']))
-            {
-                $response = $handler->handle($request);
-            }
-            else
-            {
-                $response = new Response();
-                $response->getBody()->write(json_encode(array('Error!'=>'Parametros equivocados')));
-            }
-            return $response;
+        if ($this->checkParams($params, $this->parametrosACheck)) {
+            $response = $handler->handle($request);
+        } else {
+            $response = new Response();
+            $response->getBody()->write(json_encode(['Error!' => 'Parametros equivocados']));
         }
-        
+
+        return $response;
+    }
+
+    private function checkParams($params, $parametrosACheck) {
+        foreach ($parametrosACheck as $param) {
+            if (!isset($params[$param])) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -36,6 +36,22 @@ class Empleado{
         $empleado->DarAlta();
         return $empleado;
     }
+
+    public static function ModificarEmpleado($nombre,$funcion){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("UPDATE empleados SET funcion = :funcion WHERE nombre = :nombre");
+        $consulta->bindValue(':nombre', $nombre, PDO::PARAM_STR);
+        $consulta->bindValue(':funcion', $funcion, PDO::PARAM_STR);
+        $consulta->execute();
+    }
+
+    public static function AgregarFechaBaja($nombre){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("UPDATE empleados SET fecha_baja = :fecha_baja WHERE nombre = :nombre");
+        $consulta->bindValue(':nombre', $nombre, PDO::PARAM_STR);
+        $consulta->bindValue(':fecha_baja', Fecha::DarFechaActual());
+        $consulta->execute();
+    }
     
     public static function MostrarEmpleados(){
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();

@@ -1,6 +1,7 @@
 <?php
 include_once './clases/mesa.php';
-
+include_once './clases/pedido.php';
+include_once './clases/producto.php';
 use Slim\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -35,6 +36,56 @@ class MesaController {
         $mesas = Mesa::MostrarEnUso();
         $mesas = json_encode($mesas);
         $response->getBody()->write($mesas);
+        return $response;
+    }
+
+    public function entregarCuenta(Request $request, Response $response, $args){
+        $params = $request->getQueryParams();
+        $codigoMesa = $params['mesa'];
+        $codigoPedido = $params['codigo'];
+        $estado = 'con cliente pagando';
+        $cuenta = array();
+        $mesa = Mesa::MostrarUna($codigoMesa,'con cliente comiendo');
+        if ($mesa) {
+            $pedidos = Pedido::mostrarPedidosXCodigo($codigoPedido);
+            $itemNumber = 1;
+            foreach ($pedidos as $pedido) {
+                if ($pedido['estado'] != 'entregado') {
+                    $response->getBody()->write(json_encode(array('Error!' => 'Pedido incorrecto')));
+                    return $response;
+                } else {
+                    $producto = Producto::ValidarProducto($pedido['id_producto']);
+                    if ($producto) {
+                        $itemDescription = "item {$itemNumber}, " . $producto['nombre'] . ' cantidad: ' . $pedido['cantidad'] . ' $' . $pedido['valor_total'];
+                        $cuenta[] = $itemDescription;
+                        $itemNumber++;
+                    } else {
+                        $response->getBody()->write(json_encode(array('Error!' => 'Producto no encontrado')));
+                        return $response;
+                    }
+                }
+            }
+            Mesa::CambiarEstado($codigoMesa, $estado);
+            $response->getBody()->write(json_encode(array('cuenta' => $cuenta)));
+            return $response;
+        } else {
+            $response->getBody()->write(json_encode(array('Error!' => 'Mesa no encontrada')));
+            return $response;
+        }
+    }
+
+    public static function cerrarMesa(Request $request, Response $response, $args){
+        $params = $request->getQueryParams();
+        $codigoMesa = $params['mesa'];
+        $estado = 'cerrada';
+        $mesa = Mesa::MostrarUna($codigoMesa,'con cliente pagando');
+        if($mesa){
+            Mesa::CambiarEstado($codigoMesa, $estado);
+            $response->getBody()->write(json_encode(array('Status' => 'Mesa ' . $codigoMesa . ' cerrada con exito')));
+        }else{
+            $response->getBody()->write(json_encode(array('Error!' => 'Mesa no encontrada')));
+            
+        }
         return $response;
     }
 }

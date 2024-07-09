@@ -208,5 +208,17 @@ class Pedido{
         $consultaDos->execute();
     }
     
-
+    public static function traerMesaPaga($codigo,$codigo_mesa){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM pedidos_principal WHERE codigo = :codigo AND codigo_mesa = :codigo_mesa AND estado = 'entregado'");
+        $consulta->bindValue(':codigo', $codigo, PDO::PARAM_STR);
+        $consulta->bindValue(':codigo_mesa', $codigo_mesa, PDO::PARAM_STR);
+        $consulta->execute();
+        $pedido = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($pedido) {
+            return $pedido;
+        } else {
+            return false;
+        }
+    }
 }
