@@ -30,7 +30,7 @@ class AuthMiddleware
             AutentificadorJWT::VerificarToken($token);
             $data = AutentificadorJWT::ObtenerData($token);
             $funcion = $data->funcion;
-            if(in_array($funcion, $this->funciones) || $funcion == 'Socio' || $funcion == 'Admin'){
+            if(in_array($funcion, $this->funciones) || $funcion == 'Admin'){
                 $request = $request->withAttribute('jwt_data', $data);
                 $response = $handler->handle($request);
             } else {

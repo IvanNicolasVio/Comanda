@@ -31,44 +31,44 @@ $app->group('/empleados', function(RouteCollectorProxy $group){
         ->add(new CheckNombreMW())
         ->add(new issetMW(['nombre','contrasenia','funcion']))
         ->add(new CheckRolMW())
-        ->add(new AuthMiddleware());
+        ->add(new AuthMiddleware(['Socio']));
 
     $group->put('/modificar',\EmpleadoController::class . ':Modificar')
         ->add(new issetMW(['nombre','funcion']))
         ->add(new CheckRolMW())
-        ->add(new AuthMiddleware());
+        ->add(new AuthMiddleware(['Socio']));
     
     $group->delete('/borrar',\EmpleadoController::class . ':SoftDelete')
     ->add(new issetMW(['nombre']))
-    ->add(new AuthMiddleware());
+    ->add(new AuthMiddleware(['Socio']));
 
     $group->get('/traerTodos',\EmpleadoController::class . ':TraerTodos')
-        ->add(new AuthMiddleware());
+        ->add(new AuthMiddleware(['Socio']));
     $group->get('/traerAltas',\EmpleadoController::class . ':TraerAltas')
-        ->add(new AuthMiddleware());
+        ->add(new AuthMiddleware(['Socio']));
     $group->get('/traerPorFuncion',\EmpleadoController::class . ':TraerPorFuncion')
         ->add(new CheckRolMW())
         ->add(new issetMW(['funcion']))
-        ->add(new AuthMiddleware());
+        ->add(new AuthMiddleware(['Socio']));
 });
 
 $app->group('/mesas', function(RouteCollectorProxy $group){
     $group->post('/crear',\MesaController::class . ':crear')
-        ->add(new AuthMiddleware());
+        ->add(new AuthMiddleware(['Socio']));
     $group->get('/traerTodas',\MesaController::class . ':TraerTodas')
-        ->add(new AuthMiddleware(['Mozo']));
+        ->add(new AuthMiddleware(['Socio','Mozo']));
     $group->get('/traerSinUso',\MesaController::class . ':TraerSinUso')
-        ->add(new AuthMiddleware(['Mozo']));
+        ->add(new AuthMiddleware(['Socio','Mozo']));
     $group->get('/traerEnUso',\MesaController::class . ':TraerEnUso')
-        ->add(new AuthMiddleware(['Mozo']));
+        ->add(new AuthMiddleware(['Socio','Mozo']));
 
     $group->put('/entregarCuenta',\MesaController::class . ':entregarCuenta')
     ->add(new issetMW(['mesa','codigo']))
-    ->add(new AuthMiddleware(['Mozo']));
+    ->add(new AuthMiddleware(['Socio','Mozo']));
 
     $group->put('/cerrar',\MesaController::class . ':cerrarMesa')
     ->add(new issetMW(['mesa']))
-    ->add(new AuthMiddleware());
+    ->add(new AuthMiddleware(['Socio']));
 });
 
 $app->group('/productos', function(RouteCollectorProxy $group){
@@ -76,9 +76,9 @@ $app->group('/productos', function(RouteCollectorProxy $group){
         ->add(new CheckSectorMW())
         ->add(new CheckNombreMW('producto'))
         ->add(new issetMW(['nombre','sector','valor']))
-        ->add(new AuthMiddleware());
+        ->add(new AuthMiddleware(['Socio']));
     $group->get('/traerTodos',\ProductoController::class . ':TraerTodos')
-        ->add(new AuthMiddleware(['Mozo']));
+        ->add(new AuthMiddleware(['Socio','Mozo']));
 });
 
 $app->group('/pedidos', function(RouteCollectorProxy $group){
@@ -86,27 +86,27 @@ $app->group('/pedidos', function(RouteCollectorProxy $group){
         ->add(new CheckPedidoMW())
         ->add(new CheckMesaMW())
         ->add(new issetMW(['mesa','nombre','pedido']))
-        ->add(new AuthMiddleware(['Mozo']));
+        ->add(new AuthMiddleware(['Socio','Mozo']));
     $group->get('/traerTodos',\PedidoController::class . ':TraerTodos')
-        ->add(new AuthMiddleware(['Mozo']));
+        ->add(new AuthMiddleware(['Socio','Mozo']));
 
     $group->get('/traerPendientes',\PedidoController::class . ':TraerPendientes')
-        ->add(new AuthMiddleware(['Mozo']));
+        ->add(new AuthMiddleware(['Socio','Mozo']));
 
     $group->get('/mostrarPedidos',\PedidoController::class . ':TraerPorFuncion')
-        ->add(new AuthMiddleware(['Bartender','Cervecero','Cocinero']));
+        ->add(new AuthMiddleware(['Socio','Bartender','Cervecero','Cocinero']));
         
     $group->put('/preparar',\PedidoController::class . ':prepararPedido')
         ->add(new issetMW(['codigo','id_producto']))
-        ->add(new AuthMiddleware(['Bartender','Cervecero','Cocinero']));
+        ->add(new AuthMiddleware(['Socio','Bartender','Cervecero','Cocinero']));
 
     $group->put('/finalizar',\PedidoController::class . ':finalizarPedido')
         ->add(new issetMW(['codigo','id_producto']))
-        ->add(new AuthMiddleware(['Bartender','Cervecero','Cocinero']));
+        ->add(new AuthMiddleware(['Socio','Bartender','Cervecero','Cocinero']));
 
     $group->put('/entregar',\PedidoController::class . ':entregarPedido')
         ->add(new issetMW(['codigo']))
-        ->add(new AuthMiddleware(['Mozo']));
+        ->add(new AuthMiddleware(['Socio','Mozo']));
 });
 
 $app->group('/encuesta', function(RouteCollectorProxy $group){
