@@ -34,8 +34,13 @@ class MesaController {
     
     public function TraerEnUso(Request $request, Response $response, $args) {
         $mesas = Mesa::MostrarEnUso();
-        $mesas = json_encode($mesas);
-        $response->getBody()->write($mesas);
+        if($mesas){
+            $mesas = json_encode($mesas);
+            $response->getBody()->write($mesas);
+        }else{
+            $response->getBody()->write(json_encode(array('Error!' => 'No hay mesas en uso')));
+        }
+
         return $response;
     }
 
@@ -50,6 +55,10 @@ class MesaController {
             $pedidos = Pedido::mostrarPedidosXCodigo($codigoPedido);
             $itemNumber = 1;
             foreach ($pedidos as $pedido) {
+                if ($pedido['estado'] == 'cancelado') {
+                    continue;
+                }
+                
                 if ($pedido['estado'] != 'entregado') {
                     $response->getBody()->write(json_encode(array('Error!' => 'Pedido incorrecto')));
                     return $response;
@@ -85,6 +94,37 @@ class MesaController {
         }else{
             $response->getBody()->write(json_encode(array('Error!' => 'Mesa no encontrada')));
             
+        }
+        return $response;
+    }
+
+    public static function cancelarMesa(Request $request, Response $response, $args){
+        $params = $request->getQueryParams();
+        $codigoMesa = $params['mesa'];
+        $estado = 'cerrada';
+        $mesa = Mesa::TraerUna($codigoMesa);
+        if($mesa){
+            Mesa::CambiarEstado($codigoMesa, $estado);
+            Pedido::cancelarPedidos($codigoMesa);
+            $response->getBody()->write(json_encode(array('Status' => 'Mesa ' . $codigoMesa . ' cerrada con exito')));
+        }else{
+            $response->getBody()->write(json_encode(array('Error!' => 'Mesa no encontrada')));
+            
+        }
+        return $response;
+    }
+
+    public static function BorrarMesa(Request $request, Response $response, $args){
+        $params = $request->getQueryParams();
+        $codigoMesa = $params['mesa'];
+        $mesa = Mesa::TraerUna($codigoMesa);
+        if($mesa){
+            $exito = Mesa::BorrarMesa($codigoMesa);
+            if($exito > 0){
+                $response->getBody()->write(json_encode(array('Status' => 'Mesa ' . $codigoMesa . ' borrada')));
+            }
+        }else{
+            $response->getBody()->write(json_encode(array('Error!' => 'Mesa no encontrada')));
         }
         return $response;
     }

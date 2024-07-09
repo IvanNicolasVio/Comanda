@@ -18,4 +18,23 @@ class ProductoController {
         $response->getBody()->write($productos);
         return $response;
     }
+
+    public function Modificar(Request $request, Response $response, $args) {
+        $params = $request->getQueryParams();
+        $nombre = $params['nombre'];
+        $valor = $params['valor'];
+        $producto = Producto::modificarProducto($valor,$nombre);
+        $producto = json_encode($producto);
+        $response->getBody()->write($producto);
+        return $response;
+    }
+
+    public function Borrar(Request $request, Response $response, $args) {
+        $params = $request->getQueryParams();
+        $id = $params['id'];
+        $producto = Producto::BorrarProducto($id);
+        $producto = json_encode($producto);
+        $response->getBody()->write($producto);
+        return $response;
+    }
 }

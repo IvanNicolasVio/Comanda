@@ -86,4 +86,24 @@ class Mesa{
         }
     }
 
+    public static function TraerUna($codigo){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM mesas WHERE codigo = :codigo");
+        $consulta->bindValue(':codigo', $codigo, PDO::PARAM_STR);
+        $consulta->execute();
+        $mesa = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($mesa) {
+            return $mesa;
+        } else {
+            return false;
+        }
+    }
+
+    public static function BorrarMesa($codigo){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("DELETE FROM mesas WHERE codigo = :codigo AND estado = 'cerrada'");
+        $consulta->bindValue(':codigo', $codigo, PDO::PARAM_STR);
+        $consulta->execute();
+        return $consulta->rowCount();
+    }
 }

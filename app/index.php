@@ -12,6 +12,7 @@ require_once '../app/middleware/CheckRolMW.php';
 require_once '../app/middleware/CheckSectorMW.php';
 require_once '../app/middleware/CheckPedidoMW.php';
 require_once '../app/middleware/CheckNumsMW.php';
+require_once '../app/middleware/CheckIntMW.php';
 require_once '../app/middleware/issetMW.php';
 require_once '../app/middleware/AuthMiddleware.php';
 
@@ -55,6 +56,12 @@ $app->group('/empleados', function(RouteCollectorProxy $group){
 $app->group('/mesas', function(RouteCollectorProxy $group){
     $group->post('/crear',\MesaController::class . ':crear')
         ->add(new AuthMiddleware(['Socio']));
+    $group->put('/cancelar',\MesaController::class . ':cancelarMesa')
+        ->add(new issetMW(['mesa']))
+        ->add(new AuthMiddleware(['Socio']));
+    $group->delete('/borrar',\MesaController::class . ':BorrarMesa')
+        ->add(new issetMW(['mesa']))
+        ->add(new AuthMiddleware(['Socio']));
     $group->get('/traerTodas',\MesaController::class . ':TraerTodas')
         ->add(new AuthMiddleware(['Socio','Mozo']));
     $group->get('/traerSinUso',\MesaController::class . ':TraerSinUso')
@@ -74,11 +81,22 @@ $app->group('/mesas', function(RouteCollectorProxy $group){
 $app->group('/productos', function(RouteCollectorProxy $group){
     $group->post('/crear',\ProductoController::class . ':crear')
         ->add(new CheckSectorMW())
+        ->add(new CheckIntMW(['valor']))
         ->add(new CheckNombreMW('producto'))
         ->add(new issetMW(['nombre','sector','valor']))
         ->add(new AuthMiddleware(['Socio']));
+
     $group->get('/traerTodos',\ProductoController::class . ':TraerTodos')
         ->add(new AuthMiddleware(['Socio','Mozo']));
+    $group->put('/modificar',\ProductoController::class . ':Modificar')
+    ->add(new CheckIntMW(['valor']))
+    ->add(new issetMW(['nombre','valor']))
+    ->add(new AuthMiddleware(['Socio']));
+
+    $group->delete('/borrar',\ProductoController::class . ':Borrar')
+    ->add(new issetMW(['id']))
+    ->add(new AuthMiddleware(['Socio']));
+        
 });
 
 $app->group('/pedidos', function(RouteCollectorProxy $group){
@@ -87,6 +105,7 @@ $app->group('/pedidos', function(RouteCollectorProxy $group){
         ->add(new CheckMesaMW())
         ->add(new issetMW(['mesa','nombre','pedido']))
         ->add(new AuthMiddleware(['Socio','Mozo']));
+
     $group->get('/traerTodos',\PedidoController::class . ':TraerTodos')
         ->add(new AuthMiddleware(['Socio','Mozo']));
 
@@ -107,6 +126,10 @@ $app->group('/pedidos', function(RouteCollectorProxy $group){
     $group->put('/entregar',\PedidoController::class . ':entregarPedido')
         ->add(new issetMW(['codigo']))
         ->add(new AuthMiddleware(['Socio','Mozo']));
+
+    $group->put('/cancelar',\PedidoController::class . ':cancelarUnPedido')
+    ->add(new issetMW(['codigo','id_producto']))
+    ->add(new AuthMiddleware(['Socio','Mozo']));
 });
 
 $app->group('/encuesta', function(RouteCollectorProxy $group){

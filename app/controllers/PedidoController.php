@@ -26,8 +26,13 @@ class PedidoController {
 
     public function TraerPendientes(Request $request, Response $response, $args) {
         $pedidos = Pedido::MostrarPendientes();
-        $pedidos = json_encode($pedidos);
-        $response->getBody()->write($pedidos);
+        if($pedidos){
+            $pedidos = json_encode($pedidos);
+            $response->getBody()->write($pedidos);
+        }else{
+            $response->getBody()->write(json_encode(array('Status'=> 'No hay pedidos pendientes'))); 
+        }
+
         return $response;
     }
 
@@ -73,6 +78,10 @@ class PedidoController {
             $todosListos = true;
             $todosEntregados = false;
             foreach ($pedidos as $pedido) {
+                if ($pedido['estado'] == 'cancelado') {
+                    continue;
+                }
+                
                 if($pedido['estado'] == 'entregado'){
                     $todosEntregados = true;
                     break;
@@ -99,6 +108,15 @@ class PedidoController {
             $response->getBody()->write(json_encode(array('Status' => 'No hay pedidos para mostrar')));
         }
         
+        return $response;
+    }
+
+    public function cancelarUnPedido(Request $request, Response $response, $args) {
+        $params = $request->getQueryParams();
+        $codigo = $params['codigo'];
+        $id_producto = $params['id_producto'];
+        $status = Pedido::cancelarUnPedido($id_producto,$codigo);
+        $response->getBody()->write(json_encode($status));
         return $response;
     }
 }

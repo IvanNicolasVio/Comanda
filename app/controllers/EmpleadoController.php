@@ -69,7 +69,7 @@ class EmpleadoController {
         $contrasenia = $params['contrasenia'];
         $empleado = Empleado::TraerEmpleadoPorUsuarioContraseña($usuario,$contrasenia);
         if($empleado){
-            if($empleado['fecha_baja'] > 0){
+            if($empleado['fecha_baja'] != '0000-00-00'){
                 $response = new Response();
                 $data = json_encode(array('Error!' => 'Dado de baja'));
                 $response->getBody()->write($data);

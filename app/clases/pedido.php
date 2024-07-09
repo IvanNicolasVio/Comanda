@@ -221,4 +221,42 @@ class Pedido{
             return false;
         }
     }
+
+    public static function cancelarPedidos($codigoMesa)
+    {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $sqlDos = "UPDATE pedidos_secundario ps
+                                    INNER JOIN pedidos_principal pp ON ps.codigo = pp.codigo
+                                    SET ps.estado = 'cancelado'
+                                    WHERE pp.codigo_mesa = :codigo_mesa AND ps.estado != 'entregado'";
+        $consultaDos = $objetoAccesoDato->RetornarConsulta($sqlDos);
+        $consultaDos->bindValue(':codigo_mesa', $codigoMesa, PDO::PARAM_STR);
+        $consultaDos->execute();
+
+        $sql = "UPDATE pedidos_principal
+                SET estado = 'cancelado'
+                WHERE codigo_mesa = :codigo_mesa AND estado != 'entregado'";
+
+        $consulta = $objetoAccesoDato->RetornarConsulta($sql);
+        $consulta->bindValue(':codigo_mesa', $codigoMesa, PDO::PARAM_STR);
+        $consulta->execute();
+    }
+
+    public static function cancelarUnPedido($id,$codigo){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $sql = "UPDATE pedidos_secundario
+                SET estado = 'cancelado'
+                WHERE codigo = :codigo AND id_producto = :id_producto AND estado != 'entregado'";
+
+        $consulta = $objetoAccesoDato->RetornarConsulta($sql);
+        $consulta->bindValue(':codigo', $codigo, PDO::PARAM_STR);
+        $consulta->bindValue(':id_producto', $id, PDO::PARAM_INT);
+        $consulta->execute();
+
+        if ($consulta->rowCount() > 0) {
+            return array('Status' => 'Pedido cancelado');
+        } else {
+            return array('Status' => 'No hay pedidos para cancelar');
+        }
+    }
 }

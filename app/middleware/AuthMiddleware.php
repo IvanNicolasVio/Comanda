@@ -18,7 +18,6 @@ class AuthMiddleware
     public function __invoke(Request $request, RequestHandler $handler): Response
     {   
         $header = $request->getHeaderLine('Authorization');
-        
         if (empty($header) || strpos($header, 'Bearer ') !== 0) {
             $response = new Response();
             $payload = json_encode(array('Error!' => 'Token no proporcionado o mal formado'));

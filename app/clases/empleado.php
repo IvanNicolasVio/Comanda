@@ -67,7 +67,7 @@ class Empleado{
 
     public static function MostrarEmpleadosAlta(){
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM empleados WHERE fecha_baja = 0 ");
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM empleados WHERE fecha_baja = '0000-00-00' ");
         $consulta->execute();
         $empleados = $consulta->fetchAll(PDO::FETCH_ASSOC);
         if ($empleados) {

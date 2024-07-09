@@ -68,4 +68,29 @@ class Producto{
         }
     }
 
+    public static function modificarProducto($valor,$nombre){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("UPDATE FROM productos SET valor = :valor WHERE nombre = :nombre");
+        $consulta->bindValue(':valor', $valor, PDO::PARAM_INT);
+        $consulta->bindValue(':nombre', $nombre, PDO::PARAM_STR);
+        $consulta->execute();
+
+        if ($consulta->rowCount() > 0) {
+            return array('Status' => 'Producto actualizado');
+        } else {
+            return array('Status' => 'No hay productos con ese nombre');
+        }
+    }
+
+    public static function BorrarProducto($id){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("DELETE FROM productos WHERE id = :id ");
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        $consulta->execute();
+        if ($consulta->rowCount() > 0) {
+            return array('Status' => 'Producto borrado');
+        } else {
+            return array('Status' => 'No hay productos con ese id');
+        }
+    }
 }
