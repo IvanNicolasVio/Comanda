@@ -5,6 +5,7 @@ require_once '../app/controllers/EmpleadoController.php';
 require_once '../app/controllers/MesaController.php';
 require_once '../app/controllers/ProductoController.php';
 require_once '../app/controllers/PedidoController.php';
+require_once '../app/middleware/CheckNombreMW.php';
 require_once '../app/middleware/CheckMesaMW.php';
 require_once '../app/middleware/CheckRolMW.php';
 require_once '../app/middleware/CheckSectorMW.php';
@@ -26,38 +27,63 @@ $app->group('/log', function(RouteCollectorProxy $group){
 $app->group('/empleados', function(RouteCollectorProxy $group){
     $group->post('/crear',\EmpleadoController::class . ':crear')
         ->add(new AuthMiddleware())
-        ->add(new CheckRolMW())
-        ->add(new issetMW('usuario'));
-    $group->get('/traerTodos',\EmpleadoController::class . ':TraerTodos');
-    $group->get('/traerAltas',\EmpleadoController::class . ':TraerAltas');
+        ->add(new CheckNombreMW())
+        ->add(new issetMW('usuario'))
+        ->add(new CheckRolMW());
+    $group->get('/traerTodos',\EmpleadoController::class . ':TraerTodos')
+        ->add(new AuthMiddleware());
+    $group->get('/traerAltas',\EmpleadoController::class . ':TraerAltas')
+        ->add(new AuthMiddleware());
     $group->get('/traerPorFuncion',\EmpleadoController::class . ':TraerPorFuncion')
         ->add(new CheckRolMW())
-        ->add(new issetMW('funcion'));
+        ->add(new issetMW('funcion'))
+        ->add(new AuthMiddleware());
 });
 
 $app->group('/mesas', function(RouteCollectorProxy $group){
-    $group->post('/crear',\MesaController::class . ':crear');
-    $group->get('/traerTodas',\MesaController::class . ':TraerTodas');
-    $group->get('/traerSinUso',\MesaController::class . ':TraerSinUso');
-    $group->get('/traerEnUso',\MesaController::class . ':TraerEnUso');
+    $group->post('/crear',\MesaController::class . ':crear')
+        ->add(new AuthMiddleware());
+    $group->get('/traerTodas',\MesaController::class . ':TraerTodas')
+        ->add(new AuthMiddleware(['Mozo']));
+    $group->get('/traerSinUso',\MesaController::class . ':TraerSinUso')
+        ->add(new AuthMiddleware(['Mozo']));
+    $group->get('/traerEnUso',\MesaController::class . ':TraerEnUso')
+        ->add(new AuthMiddleware(['Mozo']));
 });
 
 $app->group('/productos', function(RouteCollectorProxy $group){
     $group->post('/crear',\ProductoController::class . ':crear')
-    ->add(new CheckSectorMW())
-    ->add(new issetMW('producto'));
-    $group->get('/traerTodos',\ProductoController::class . ':TraerTodos');
+        ->add(new CheckSectorMW())
+        ->add(new CheckNombreMW('producto'))
+        ->add(new issetMW('producto'))
+        ->add(new AuthMiddleware());
+    $group->get('/traerTodos',\ProductoController::class . ':TraerTodos')
+        ->add(new AuthMiddleware(['Mozo']));
 });
 
 $app->group('/pedidos', function(RouteCollectorProxy $group){
     $group->post('/tomar',\PedidoController::class . ':crear')
-    ->add(new CheckPedidoMW())
-    ->add(new CheckMesaMW())
-    ->add(new issetMW('pedido'));
-    $group->get('/traerTodos',\PedidoController::class . ':TraerTodos');
-    $group->get('/traerPendientes',\PedidoController::class . ':TraerPendientes');
+        ->add(new CheckPedidoMW())
+        ->add(new CheckMesaMW())
+        ->add(new issetMW('pedido'))
+        ->add(new AuthMiddleware(['Mozo']));
+    $group->get('/traerTodos',\PedidoController::class . ':TraerTodos')
+        ->add(new AuthMiddleware(['Mozo']));
+
+    $group->get('/traerPendientes',\PedidoController::class . ':TraerPendientes')
+        ->add(new AuthMiddleware(['Mozo']));
+
     $group->get('/mostrarPedidos',\PedidoController::class . ':TraerPorFuncion')
-    ->add(new issetMW('funcion'));
+        ->add(new AuthMiddleware(['Bartender','Cervecero','Cocinero']));
+        
+    $group->put('/preparar',\PedidoController::class . ':prepararPedido')
+        ->add(new AuthMiddleware(['Bartender','Cervecero','Cocinero']));
+
+    $group->put('/finalizar',\PedidoController::class . ':finalizarPedido')
+        ->add(new AuthMiddleware(['Bartender','Cervecero','Cocinero']));
+
+    $group->put('/entregar',\PedidoController::class . ':entregarPedido')
+    ->add(new AuthMiddleware(['Mozo']));
 });
 
 

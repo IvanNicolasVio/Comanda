@@ -40,9 +40,9 @@ class Mesa{
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM mesas");
         $consulta->execute();
-        $empleados = $consulta->fetchAll(PDO::FETCH_ASSOC);
-        if ($empleados) {
-            return $empleados;
+        $empleado = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($empleado) {
+            return $empleado;
         } else {
             return false;
         }

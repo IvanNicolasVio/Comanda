@@ -1,5 +1,6 @@
 <?php
 include_once './clases/empleado.php';
+
 include_once './clases/AutenticadorJWT.php';
 
 use Slim\Psr7\Response;
@@ -48,4 +49,5 @@ class EmpleadoController {
         }
         return $response;
     }
+
 }

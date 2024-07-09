@@ -55,6 +55,17 @@ class Producto{
         }
     }
 
-    
+    public static function CheckNombre($producto){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM productos WHERE nombre = ?");
+        $consulta->bindValue(1, $producto, PDO::PARAM_STR);
+        $consulta->execute();
+        $productoTraido = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($productoTraido) {
+            return $productoTraido;
+        } else {
+            return false;
+        }
+    }
 
 }

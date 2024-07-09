@@ -87,4 +87,17 @@ class Empleado{
             return false;
         }
     }
+
+    public static function CheckNombre($usuario){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM empleados WHERE nombre = ?");
+        $consulta->bindValue(1, $usuario, PDO::PARAM_STR);
+        $consulta->execute();
+        $empleado = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($empleado) {
+            return $empleado;
+        } else {
+            return false;
+        }
+    }
 }
