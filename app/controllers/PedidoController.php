@@ -4,6 +4,7 @@ include_once './clases/pedido.php';
 include_once './clases/empleado.php';
 include_once './clases/mesa.php';
 include_once './controllers/MesaController.php';
+include_once './controllers/ImagenController.php';
 
 use Slim\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -14,6 +15,25 @@ class PedidoController {
         $numeroPedido = Pedido::Cargar($params);
         MesaController::Actualizar($params);
         $response->getBody()->write(json_encode(array('Status'=> 'Pedido numero: ' . $numeroPedido . ' cargado con exito')));
+        return $response;
+    }
+
+    public function adjuntarFoto(Request $request, Response $response, $args){
+        if (!isset($_FILES['foto']) || empty($_FILES['foto']['tmp_name'])) {
+            $response->getBody()->write(json_encode(array('Error' => 'Ingrese una foto')));
+            return $response;
+        }
+        $params = $request->getParsedBody();
+        $codigo_mesa = $params['mesa'];
+        $codigo_pedido = $params['pedido'];
+        $fileFoto = $_FILES['foto'];
+        $ruta = ImagenController::FotoMesa($codigo_mesa, $codigo_pedido, $fileFoto);
+        $foto = Pedido::adjuntarFoto($codigo_mesa, $codigo_pedido, $ruta);
+        if ($foto) {
+            $response->getBody()->write(json_encode(array('Status' => 'Foto cargada con exito')));
+        } else {
+            $response->getBody()->write(json_encode(array('Error' => 'Problema al adjuntar la foto')));
+        }
         return $response;
     }
 

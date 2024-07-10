@@ -1,0 +1,11 @@
+Cerveza,barra,50
+Hamburguesa,cocina,150
+Palomitas,candybar,30
+Pizza,cocina,200
+Refresco,barra,20
+Nachos,candybar,40
+Vino,barra,10000
+Hotdog,cocina,120
+Cerveza Artesanal,chopera,70
+Sándwich,cocina,80
+Dulces,candybar,15

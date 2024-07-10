@@ -30,13 +30,13 @@ $app->group('/log', function(RouteCollectorProxy $group){
 $app->group('/empleados', function(RouteCollectorProxy $group){
     $group->post('/crear',\EmpleadoController::class . ':crear')
         ->add(new CheckNombreMW())
-        ->add(new issetMW(['nombre','contrasenia','funcion']))
         ->add(new CheckRolMW())
+        ->add(new issetMW(['nombre','contrasenia','funcion']))
         ->add(new AuthMiddleware(['Socio']));
 
     $group->put('/modificar',\EmpleadoController::class . ':Modificar')
-        ->add(new issetMW(['nombre','funcion']))
         ->add(new CheckRolMW())
+        ->add(new issetMW(['nombre','funcion']))
         ->add(new AuthMiddleware(['Socio']));
     
     $group->delete('/borrar',\EmpleadoController::class . ':SoftDelete')
@@ -50,6 +50,10 @@ $app->group('/empleados', function(RouteCollectorProxy $group){
     $group->get('/traerPorFuncion',\EmpleadoController::class . ':TraerPorFuncion')
         ->add(new CheckRolMW())
         ->add(new issetMW(['funcion']))
+        ->add(new AuthMiddleware(['Socio']));
+    $group->post('/cargarCsv',\EmpleadoController::class . ':CargarMuchosEmpleados')
+        ->add(new AuthMiddleware(['Socio']));
+    $group->get('/descargarCsv',\EmpleadoController::class . ':DescargarMuchosEmpleados')
         ->add(new AuthMiddleware(['Socio']));
 });
 
@@ -88,14 +92,19 @@ $app->group('/productos', function(RouteCollectorProxy $group){
 
     $group->get('/traerTodos',\ProductoController::class . ':TraerTodos')
         ->add(new AuthMiddleware(['Socio','Mozo']));
-    $group->put('/modificar',\ProductoController::class . ':Modificar')
-    ->add(new CheckIntMW(['valor']))
-    ->add(new issetMW(['nombre','valor']))
-    ->add(new AuthMiddleware(['Socio']));
+    $group->put('/modificar',\ProductoController::class . ':modificar')
+        ->add(new CheckIntMW(['valor']))
+        ->add(new issetMW(['nombre','valor']))
+        ->add(new AuthMiddleware(['Socio']));
 
     $group->delete('/borrar',\ProductoController::class . ':Borrar')
-    ->add(new issetMW(['id']))
-    ->add(new AuthMiddleware(['Socio']));
+        ->add(new issetMW(['id']))
+        ->add(new AuthMiddleware(['Socio']));
+
+    $group->post('/cargarCsv',\ProductoController::class . ':CargarMuchosProductos')
+        ->add(new AuthMiddleware(['Socio']));
+    $group->get('/descargarCsv',\ProductoController::class . ':DescargarMuchosProductos')
+        ->add(new AuthMiddleware(['Socio']));
         
 });
 
@@ -104,6 +113,11 @@ $app->group('/pedidos', function(RouteCollectorProxy $group){
         ->add(new CheckPedidoMW())
         ->add(new CheckMesaMW())
         ->add(new issetMW(['mesa','nombre','pedido']))
+        ->add(new AuthMiddleware(['Socio','Mozo']));
+
+    $group->post('/adjuntarFoto',\PedidoController::class . ':adjuntarFoto')
+        ->add(new CheckMesaMW())
+        ->add(new issetMW(['mesa','pedido']))
         ->add(new AuthMiddleware(['Socio','Mozo']));
 
     $group->get('/traerTodos',\PedidoController::class . ':TraerTodos')

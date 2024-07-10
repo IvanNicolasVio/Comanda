@@ -70,7 +70,7 @@ class Producto{
 
     public static function modificarProducto($valor,$nombre){
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objetoAccesoDato->RetornarConsulta("UPDATE FROM productos SET valor = :valor WHERE nombre = :nombre");
+        $consulta = $objetoAccesoDato->RetornarConsulta("UPDATE productos SET valor = :valor WHERE nombre = :nombre");
         $consulta->bindValue(':valor', $valor, PDO::PARAM_INT);
         $consulta->bindValue(':nombre', $nombre, PDO::PARAM_STR);
         $consulta->execute();

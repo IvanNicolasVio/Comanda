@@ -207,6 +207,24 @@ class Pedido{
         $consultaDos->bindValue(':codigo', $codigo, PDO::PARAM_STR);
         $consultaDos->execute();
     }
+
+    public static function adjuntarFoto($mesa,$codigo,$ruta_foto){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $sql = "UPDATE pedidos_principal 
+                SET ruta_foto = :ruta_foto
+                WHERE codigo = :codigo AND codigo_mesa = :codigo_mesa";
+        $consulta = $objetoAccesoDato->RetornarConsulta($sql);
+        $consulta->bindValue(':ruta_foto', $ruta_foto, PDO::PARAM_STR);
+        $consulta->bindValue(':codigo', $codigo, PDO::PARAM_STR);
+        $consulta->bindValue(':codigo_mesa', $mesa, PDO::PARAM_STR);
+        $consulta->execute();
+
+        if ($consulta->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     
     public static function traerMesaPaga($codigo,$codigo_mesa){
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();

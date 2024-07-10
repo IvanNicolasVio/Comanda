@@ -85,4 +85,71 @@ class EmpleadoController {
         return $response->withHeader('Content-Type', 'application/json');;
     }
 
+    public function CargarMuchosEmpleados(Request $request, Response $response, $args)
+    {
+        $parametros = $request->getUploadedFiles();
+        if (empty($parametros)) {
+            $response->getBody()->write(json_encode(['Status' => 'No se ha ingresado ningún archivo']));
+            return $response->withHeader('Content-Type', 'application/json');
+        }
+        $archivoCsv = $parametros['csv'];
+        if ($archivoCsv->getError() === UPLOAD_ERR_OK) {
+            $archivo = $archivoCsv->getClientFilename();
+            $directorio = __DIR__ . '/../archivos/';
+            if (!file_exists($directorio)) {
+                mkdir($directorio, 0777, true);
+            }
+            $archivoCsv->moveTo($directorio . $archivo);
+            $file = fopen($directorio . $archivo, 'r');
+            $arrayFinal = [];
+            while (($data = fgetcsv($file, 1000, ",")) !== FALSE) {
+                $nombre = $data[0];
+                $contrasenia = $data[1];
+                $funcion = $data[2];
+                if (!in_array($funcion, ["Bartender", "Mozo", "Cervecero", "Cocinero", "Socio"])) {
+                    $arrayFinal[] = ['Status' => 'Funcion no valida para ' . $nombre . ', no sera cargado'];
+                    continue;
+                }
+                $empleado = Empleado::CheckNombre($nombre);
+                if ($empleado) {
+                    $arrayFinal[] = ['Status' => 'El usuario ' . $nombre . ' ya se encuentra cargado'];
+                    continue;
+                } else {
+                    $params = [
+                        'nombre' => $nombre,
+                        'contrasenia' => $contrasenia,
+                        'funcion' => $funcion,
+                    ];
+                    $empleado = Empleado::CrearEmpleado($params);
+                    $arrayFinal[] = ['Status' => $empleado->nombre . ' dado de alta con éxito!'];
+                }
+            }
+            fclose($file);
+            $response->getBody()->write(json_encode($arrayFinal));
+        } else {
+            $response->getBody()->write(json_encode(['Error!' => 'Error al subir el archivo']));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function DescargarMuchosEmpleados(Request $request, Response $response, $args)
+    {
+        $empleados = Empleado::MostrarEmpleados();
+        if ($empleados) {
+            $filename = "empleados.csv";
+            $file = fopen('php://memory', 'w');
+            foreach ($empleados as $empleado) {
+                fputcsv($file, $empleado);
+            }
+            fseek($file, 0);
+            $response = $response->withHeader('Content-Type', 'text/csv')
+                                ->withHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
+            $response->getBody()->write(stream_get_contents($file));
+            fclose($file);
+        } else {
+            $response->getBody()->write(json_encode(['Error!' => 'No hay empleados']));
+            return $response;
+        }
+        return $response;
+    }
 }
