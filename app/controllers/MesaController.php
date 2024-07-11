@@ -9,7 +9,7 @@ class MesaController {
     public function crear(Request $request, Response $response, $args) {
         $mesa = Mesa::CrearMesa();
         $response->getBody()->write(json_encode(array('Status'=>$mesa->codigo . ' dada de alta con exito!')));
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public static function Actualizar($params){
@@ -22,14 +22,14 @@ class MesaController {
         $mesas = Mesa::MostrarMesas();
         $mesas = json_encode($mesas);
         $response->getBody()->write($mesas);
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function TraerSinUso(Request $request, Response $response, $args) {
         $mesas = Mesa::MostrarSinUso();
         $mesas = json_encode($mesas);
         $response->getBody()->write($mesas);
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
     
     public function TraerEnUso(Request $request, Response $response, $args) {
@@ -41,7 +41,7 @@ class MesaController {
             $response->getBody()->write(json_encode(array('Error!' => 'No hay mesas en uso')));
         }
 
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function entregarCuenta(Request $request, Response $response, $args){
@@ -61,7 +61,7 @@ class MesaController {
                 
                 if ($pedido['estado'] != 'entregado') {
                     $response->getBody()->write(json_encode(array('Error!' => 'Pedido incorrecto')));
-                    return $response;
+                    return $response->withHeader('Content-Type', 'application/json');
                 } else {
                     $producto = Producto::ValidarProducto($pedido['id_producto']);
                     if ($producto) {
@@ -70,16 +70,16 @@ class MesaController {
                         $itemNumber++;
                     } else {
                         $response->getBody()->write(json_encode(array('Error!' => 'Producto no encontrado')));
-                        return $response;
+                        return $response->withHeader('Content-Type', 'application/json');
                     }
                 }
             }
             Mesa::CambiarEstado($codigoMesa, $estado);
             $response->getBody()->write(json_encode(array('cuenta' => $cuenta)));
-            return $response;
+            return $response->withHeader('Content-Type', 'application/json');
         } else {
             $response->getBody()->write(json_encode(array('Error!' => 'Mesa no encontrada')));
-            return $response;
+            return $response->withHeader('Content-Type', 'application/json');
         }
     }
 
@@ -95,7 +95,7 @@ class MesaController {
             $response->getBody()->write(json_encode(array('Error!' => 'Mesa no encontrada')));
             
         }
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public static function cancelarMesa(Request $request, Response $response, $args){
@@ -111,7 +111,7 @@ class MesaController {
             $response->getBody()->write(json_encode(array('Error!' => 'Mesa no encontrada')));
             
         }
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public static function BorrarMesa(Request $request, Response $response, $args){
@@ -126,6 +126,6 @@ class MesaController {
         }else{
             $response->getBody()->write(json_encode(array('Error!' => 'Mesa no encontrada')));
         }
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }

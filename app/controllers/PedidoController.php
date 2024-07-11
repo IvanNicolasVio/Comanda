@@ -15,13 +15,13 @@ class PedidoController {
         $numeroPedido = Pedido::Cargar($params);
         MesaController::Actualizar($params);
         $response->getBody()->write(json_encode(array('Status'=> 'Pedido numero: ' . $numeroPedido . ' cargado con exito')));
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function adjuntarFoto(Request $request, Response $response, $args){
         if (!isset($_FILES['foto']) || empty($_FILES['foto']['tmp_name'])) {
             $response->getBody()->write(json_encode(array('Error' => 'Ingrese una foto')));
-            return $response;
+            return $response->withHeader('Content-Type', 'application/json');
         }
         $params = $request->getParsedBody();
         $codigo_mesa = $params['mesa'];
@@ -34,14 +34,14 @@ class PedidoController {
         } else {
             $response->getBody()->write(json_encode(array('Error' => 'Problema al adjuntar la foto')));
         }
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function TraerTodos(Request $request, Response $response, $args) {
         $pedidos = Pedido::MostrarPedidos();
         $pedidos = json_encode($pedidos);
         $response->getBody()->write($pedidos);
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function TraerPendientes(Request $request, Response $response, $args) {
@@ -53,7 +53,7 @@ class PedidoController {
             $response->getBody()->write(json_encode(array('Status'=> 'No hay pedidos pendientes'))); 
         }
 
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function TraerPorFuncion(Request $request, Response $response, $args) {
@@ -62,7 +62,7 @@ class PedidoController {
         $pedidos = Pedido::obtenerPedidosPorFuncion($funcion);
         $pedidos = json_encode($pedidos);
         $response->getBody()->write($pedidos);
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function prepararPedido(Request $request, Response $response, $args) {
@@ -75,7 +75,7 @@ class PedidoController {
         $pedidos = Pedido::modificarPedido($funcion, $id_producto, $id_empleado, $codigo);
         $pedidos = json_encode($pedidos);
         $response->getBody()->write($pedidos);
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function finalizarPedido(Request $request, Response $response, $args) {
@@ -87,7 +87,7 @@ class PedidoController {
         $pedidos = Pedido::finalizarPedido($id_producto, $id_empleado, $codigo);
         $pedidos = json_encode($pedidos);
         $response->getBody()->write($pedidos);
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function entregarPedido(Request $request, Response $response, $args) {
@@ -128,7 +128,7 @@ class PedidoController {
             $response->getBody()->write(json_encode(array('Status' => 'No hay pedidos para mostrar')));
         }
         
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function cancelarUnPedido(Request $request, Response $response, $args) {
@@ -137,6 +137,6 @@ class PedidoController {
         $id_producto = $params['id_producto'];
         $status = Pedido::cancelarUnPedido($id_producto,$codigo);
         $response->getBody()->write(json_encode($status));
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }

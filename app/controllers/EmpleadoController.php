@@ -11,7 +11,7 @@ class EmpleadoController {
         $params = $request->getParsedBody();
         $empleado = Empleado::CrearEmpleado($params);
         $response->getBody()->write(json_encode(array('Status'=>$empleado->nombre . ' dado de alta con exito!')));
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function Modificar(Request $request, Response $response, $args) {
@@ -25,7 +25,7 @@ class EmpleadoController {
         }else{
             $response->getBody()->write(json_encode(array('Error!'=>$nombre . ' inexistente')));
         }
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function SoftDelete(Request $request, Response $response, $args) {
@@ -38,21 +38,21 @@ class EmpleadoController {
         }else{
             $response->getBody()->write(json_encode(array('Error!'=>$nombre . ' inexistente')));
         }
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function TraerTodos(Request $request, Response $response, $args) {
         $empleados = Empleado::MostrarEmpleados();
         $empleados = json_encode($empleados);
         $response->getBody()->write($empleados);
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function TraerAltas(Request $request, Response $response, $args) {
         $empleados = Empleado::MostrarEmpleadosAlta();
         $empleados = json_encode($empleados);
         $response->getBody()->write($empleados);
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function TraerPorFuncion(Request $request, Response $response, $args) {
@@ -60,7 +60,7 @@ class EmpleadoController {
         $empleados = Empleado::MostrarEmpleadosXFuncion($params['funcion']);
         $empleados = json_encode($empleados);
         $response->getBody()->write($empleados);
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function Logearse(Request $request, Response $response, $args){
@@ -149,7 +149,7 @@ class EmpleadoController {
             fclose($file);
         } else {
             $response->getBody()->write(json_encode(['Error!' => 'No hay empleados']));
-            return $response;
+            return $response->withHeader('Content-Type', 'application/json');
         }
         return $response;
     }

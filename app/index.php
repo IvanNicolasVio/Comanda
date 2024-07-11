@@ -89,23 +89,19 @@ $app->group('/productos', function(RouteCollectorProxy $group){
         ->add(new CheckNombreMW('producto'))
         ->add(new issetMW(['nombre','sector','valor']))
         ->add(new AuthMiddleware(['Socio']));
-
     $group->get('/traerTodos',\ProductoController::class . ':TraerTodos')
         ->add(new AuthMiddleware(['Socio','Mozo']));
     $group->put('/modificar',\ProductoController::class . ':modificar')
         ->add(new CheckIntMW(['valor']))
         ->add(new issetMW(['nombre','valor']))
         ->add(new AuthMiddleware(['Socio']));
-
     $group->delete('/borrar',\ProductoController::class . ':Borrar')
         ->add(new issetMW(['id']))
         ->add(new AuthMiddleware(['Socio']));
-
     $group->post('/cargarCsv',\ProductoController::class . ':CargarMuchosProductos')
         ->add(new AuthMiddleware(['Socio']));
     $group->get('/descargarCsv',\ProductoController::class . ':DescargarMuchosProductos')
         ->add(new AuthMiddleware(['Socio']));
-
     $group->get('/carta',\ProductoController::class . ':generarCarta');
         
 });

@@ -9,14 +9,14 @@ class ProductoController {
         $params = $request->getParsedBody();
         $producto = Producto::CrearProducto($params);
         $response->getBody()->write(json_encode(array('Status'=>$producto->nombre . ' dado de alta con exito!')));
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function TraerTodos(Request $request, Response $response, $args) {
         $productos = Producto::MostrarProductos();
         $productos = json_encode($productos);
         $response->getBody()->write($productos);
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function modificar(Request $request, Response $response, $args) {
@@ -26,7 +26,7 @@ class ProductoController {
         $producto = Producto::modificarProducto($valor,$nombre);
         $producto = json_encode($producto);
         $response->getBody()->write($producto);
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function Borrar(Request $request, Response $response, $args) {
@@ -35,7 +35,7 @@ class ProductoController {
         $producto = Producto::BorrarProducto($id);
         $producto = json_encode($producto);
         $response->getBody()->write($producto);
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function CargarMuchosProductos(Request $request, Response $response, $args)
