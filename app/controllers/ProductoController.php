@@ -105,4 +105,33 @@ class ProductoController {
         }
         return $response;
     }
+
+    public function generarCarta(Request $request, Response $response, $args){
+        $productos = Producto::MostrarProductos();
+        if($productos){
+            $item = 1;
+            $pdf = new \TCPDF();
+            $pdf->AddPage();
+            $pdf->SetFont('helvetica', '', 15);
+            $html = '<h1>Carta: </h1><ul>';
+            foreach($productos as $producto){
+                $html .= '<li>' . $item . '- ' .  $producto['nombre'] .'-----' . $producto['valor'] . '</li>';
+                $item++;
+            }
+            $html .= '</ul>';
+            $pdf->writeHTML($html, true, false, true, false, '');
+            $pdf->lastPage();
+            $pdfOutput = $pdf->Output('cuenta.pdf', 'S');
+        
+            $response = $response->withHeader('Content-Type', 'application/pdf')
+                                ->withHeader('Content-Disposition', 'attachment; filename="cuenta.pdf"')
+                                ->withBody(new \Slim\Psr7\Stream(fopen('php://memory', 'r+')));
+            $response->getBody()->write($pdfOutput);
+            
+        } else {
+            $response->getBody()->write(json_encode(array('Error!' => 'Mesa no encontrada')));
+        }
+        return $response;
+    }
+    
 }

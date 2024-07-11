@@ -76,6 +76,7 @@ class EmpleadoController {
 
             }else{
                 $data = AutentificadorJWT::CrearToken($empleado);
+                Empleado::registrarIngreso($empleado);
                 $response->getBody()->write($data);
             }
 

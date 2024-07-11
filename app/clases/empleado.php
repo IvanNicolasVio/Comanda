@@ -116,4 +116,12 @@ class Empleado{
             return false;
         }
     }
+
+    public static function registrarIngreso($empleado){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into ingresos (nombre,fecha)values(:nombre,:fecha)");
+        $consulta->bindValue(':nombre', $empleado['nombre'], PDO::PARAM_STR);
+        $consulta->bindValue(':fecha',Fecha:: DarFechaConHora());
+        $consulta->execute();
+    }
 }

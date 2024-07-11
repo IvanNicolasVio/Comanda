@@ -105,6 +105,8 @@ $app->group('/productos', function(RouteCollectorProxy $group){
         ->add(new AuthMiddleware(['Socio']));
     $group->get('/descargarCsv',\ProductoController::class . ':DescargarMuchosProductos')
         ->add(new AuthMiddleware(['Socio']));
+
+    $group->get('/carta',\ProductoController::class . ':generarCarta');
         
 });
 
