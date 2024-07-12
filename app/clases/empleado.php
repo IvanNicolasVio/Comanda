@@ -137,4 +137,56 @@ class Empleado{
             return false;
         }
     }
+
+    public static function TraerPorSector($sector){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT ps.codigo, ps.id_producto, p.nombre AS producto_nombre, ps.cantidad, em.nombre AS empleado_nombre, em.funcion 
+                                                        FROM pedidos_secundario ps
+                                                        INNER JOIN productos p ON ps.id_producto = p.id
+                                                        INNER JOIN empleados em ON ps.id_empleado = em.id
+                                                        WHERE ps.estado != 'pendiente' AND em.funcion = :sector");
+        $consulta->bindValue(1, $sector, PDO::PARAM_STR);
+        $consulta->execute();
+        $empleado = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($empleado) {
+            return $empleado;
+        } else {
+            return false;
+        }
+    }
+
+    public static function TraerPorEmpleado($sector){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT ps.codigo, ps.id_producto, p.nombre AS producto_nombre, ps.cantidad, em.nombre AS empleado_nombre, em.funcion 
+                                                        FROM pedidos_secundario ps
+                                                        INNER JOIN productos p ON ps.id_producto = p.id
+                                                        INNER JOIN empleados em ON ps.id_empleado = em.id
+                                                        WHERE ps.estado != 'pendiente' AND em.funcion = :sector
+                                                        ORDER BY em.nombre ASC");
+        $consulta->bindValue(1, $sector, PDO::PARAM_STR);
+        $consulta->execute();
+        $empleado = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($empleado) {
+            return $empleado;
+        } else {
+            return false;
+        }
+    }
+
+    public static function TraerPorSeparado($nombre){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT ps.codigo, ps.id_producto, p.nombre AS producto_nombre, ps.cantidad, em.nombre AS empleado_nombre, em.funcion 
+                                                        FROM pedidos_secundario ps
+                                                        INNER JOIN productos p ON ps.id_producto = p.id
+                                                        INNER JOIN empleados em ON ps.id_empleado = em.id
+                                                        WHERE ps.estado != 'pendiente' AND em.nombre = :nombre");
+        $consulta->bindValue(1, $nombre, PDO::PARAM_STR);
+        $consulta->execute();
+        $empleado = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($empleado) {
+            return $empleado;
+        } else {
+            return false;
+        }
+    }
 }

@@ -335,4 +335,127 @@ class Pedido{
             return false;
         }
     }
+
+    public static function obtenerMesaMenosUsada() {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT codigo_mesa, COUNT(*) AS usos
+                                                        FROM pedidos_principal
+                                                        GROUP BY codigo_mesa
+                                                        ORDER BY usos ASC
+                                                        LIMIT 1");
+        $consulta->execute();
+        $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($resultado) {
+            return $resultado;
+        } else {
+            return false;
+        }
+    }
+
+    public static function traerMasVendido(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT ps.id_producto, p.nombre AS producto_nombre, COUNT(ps.id_producto) AS repeticiones
+                                                        FROM pedidos_secundario ps
+                                                        INNER JOIN productos p ON ps.id_producto = p.id
+                                                        WHERE ps.estado != 'cancelado'
+                                                        GROUP BY ps.id_producto, p.nombre
+                                                        ORDER BY repeticiones DESC
+                                                        LIMIT 1");
+        $consulta->execute();
+        $pedidos = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($pedidos) {
+            return $pedidos;
+        } else {
+            return false;
+        }
+    }
+
+    public static function traerMenosVendido(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT ps.id_producto, p.nombre AS producto_nombre, COUNT(ps.id_producto) AS repeticiones
+                                                        FROM pedidos_secundario ps
+                                                        INNER JOIN productos p ON ps.id_producto = p.id
+                                                        WHERE ps.estado != 'cancelado'
+                                                        GROUP BY ps.id_producto, p.nombre
+                                                        ORDER BY repeticiones ASC
+                                                        LIMIT 1");
+        $consulta->execute();
+        $pedidos = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($pedidos) {
+            return $pedidos;
+        } else {
+            return false;
+        }
+    }
+
+    public static function traerCancelados(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT ps.codigo, ps.id_producto, p.nombre AS producto_nombre, ps.valor_total, ps.estado 
+                                                        FROM pedidos_secundario ps
+                                                        INNER JOIN productos p ON ps.id_producto = p.id
+                                                        WHERE ps.estado = 'cancelado'");
+        $consulta->execute();
+        $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($pedidos) {
+            return $pedidos;
+        } else {
+            return false;
+        }
+    }
+
+    public static function traerMasFacturada(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT pp.codigo_mesa, SUM(ps.valor_total) AS total_facturado
+                                                        FROM pedidos_secundario ps
+                                                        INNER JOIN pedidos_principal pp ON ps.codigo = pp.codigo
+                                                        WHERE ps.estado != 'cancelado'
+                                                        GROUP BY pp.codigo_mesa
+                                                        ORDER BY total_facturado DESC
+                                                        LIMIT 1;");
+        $consulta->execute();
+        $pedidos = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($pedidos) {
+            return $pedidos;
+        } else {
+            return false;
+        }
+    }
+
+    public static function traerMenosFacturada(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT pp.codigo_mesa, SUM(ps.valor_total) AS total_facturado
+                                                        FROM pedidos_secundario ps
+                                                        INNER JOIN pedidos_principal pp ON ps.codigo = pp.codigo
+                                                        WHERE ps.estado != 'cancelado'
+                                                        GROUP BY pp.codigo_mesa
+                                                        ORDER BY total_facturado ASC
+                                                        LIMIT 1;");
+        $consulta->execute();
+        $pedidos = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($pedidos) {
+            return $pedidos;
+        } else {
+            return false;
+        }
+    }
+    
+    public static function traerFacturaEntreFechas($fechaInicio,$fechaFin,$mesa){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT pp.codigo_mesa, SUM(ps.valor_total) AS total_facturado
+                                                        FROM pedidos_secundario ps
+                                                        INNER JOIN pedidos_principal pp ON ps.codigo = pp.codigo
+                                                        WHERE pp.codigo_mesa = :codigo_mesa
+                                                        AND ps.estado != 'cancelado'
+                                                        AND pp.fecha_pedido BETWEEN :fecha_inicio AND :fecha_fin");
+        $consulta->bindValue(':codigo_mesa', $mesa, PDO::PARAM_STR);
+        $consulta->bindValue(':fecha_inicio', $fechaInicio);
+        $consulta->bindValue(':fecha_fin', $fechaFin);
+        $consulta->execute();
+        $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($pedidos) {
+            return $pedidos;
+        } else {
+            return false;
+        }
+    }
 }

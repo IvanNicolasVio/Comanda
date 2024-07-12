@@ -187,4 +187,68 @@ class EmpleadoController {
         }
         return $response->withHeader('Content-Type', 'application/json');
     }
+
+    public function traerPeoresEncuestas(Request $request, Response $response, $args){
+        $encuestas = Encuesta::traerPeoresEncuestas();
+        $encuestaArray = array();
+        if($encuestas){
+            foreach($encuestas as $encuesta){
+                $item = "Mesa N: " . $encuesta['codigo_mesa'] ." / Mesa: " . $encuesta['mesa'] . ' Restaurante: ' . $encuesta['restaurante'] . " Mozo: " . $encuesta['mozo'] . ' Cocinero: ' . $encuesta['cocinero'] . ' -> ' . $encuesta['descripcion'];
+                $encuestaArray[] = $item;
+            }
+            $response->getBody()->write(json_encode($encuestaArray));
+        }else{
+            $response->getBody()->write(json_encode(array('Error!'=>'No hay encuestas')));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function TraerOperaciones(Request $request, Response $response, $args){
+        $params = $request->getQueryParams();
+        $sector = $params['funcion'];
+        $empleado = Empleado::TraerPorSector($sector);
+        if($empleado){
+            $empleado = json_encode($empleado);
+            $response->getBody()->write($empleado);
+            
+        }else{
+            $response->getBody()->write(json_encode(array('Error!'=>'No hay operaciones del sector')));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function TraerPorEmpleado(Request $request, Response $response, $args){
+        $params = $request->getQueryParams();
+        $sector = $params['funcion'];
+        $empleado = Empleado::TraerPorEmpleado($sector);
+        if($empleado){
+            $empleado = json_encode($empleado);
+            $response->getBody()->write($empleado);
+            
+        }else{
+            $response->getBody()->write(json_encode(array('Error!'=>'No hay operaciones del sector')));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function TraerPorSeparado(Request $request, Response $response, $args){
+        $params = $request->getQueryParams();
+        $nombre = $params['nombre'];
+        $checkNombre = Empleado::CheckNombre($nombre);
+        if($checkNombre){
+            $empleado = Empleado::TraerPorSeparado($nombre);
+            if($empleado){
+                $empleado = json_encode($empleado);
+                $response->getBody()->write($empleado);
+                
+            }else{
+                $response->getBody()->write(json_encode(array('Error!'=>'No hay operaciones del empleado')));
+            }
+        }else{
+            $response->getBody()->write(json_encode(array('Error!'=>'No existe el empleado')));
+        }
+        
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
 }

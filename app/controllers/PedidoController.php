@@ -175,4 +175,37 @@ class PedidoController {
         $response->getBody()->write(json_encode($status));
         return $response->withHeader('Content-Type', 'application/json');
     }
+
+    public function traerMasVendido(Request $request, Response $response, $args) {
+        $pedidos = Pedido::traerMasVendido();
+        if($pedidos){
+            $pedidos = json_encode($pedidos);
+            $response->getBody()->write($pedidos);
+        }else{
+            $response->getBody()->write(json_encode(array('Status'=> 'No hay pedidos vendidos')));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function traerMenosVendido(Request $request, Response $response, $args) {
+        $pedidos = Pedido::traerMenosVendido();
+        if($pedidos){
+            $pedidos = json_encode($pedidos);
+            $response->getBody()->write($pedidos);
+        }else{
+            $response->getBody()->write(json_encode(array('Status'=> 'No hay pedidos vendidos')));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function traerCancelados(Request $request, Response $response, $args) {
+        $pedidos = Pedido::traerCancelados();
+        if($pedidos){
+            $pedidos = json_encode($pedidos);
+            $response->getBody()->write($pedidos);
+        }else{
+            $response->getBody()->write(json_encode(array('Status'=> 'No hay pedidos cancelados')));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
 }

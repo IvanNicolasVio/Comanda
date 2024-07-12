@@ -151,4 +151,40 @@ $app->group('/encuesta', function(RouteCollectorProxy $group){
     ->add(new AuthMiddleware(['Socio']));
 });
 
+$app->group('/admin', function(RouteCollectorProxy $group){
+    $group->get('/traerPorSector',\EmpleadoController::class . ':TraerOperaciones')
+    ->add(new issetMW(['funcion']))
+    ->add(new AuthMiddleware());
+    $group->get('/traerPorEmpleado',\EmpleadoController::class . ':TraerPorEmpleado')
+    ->add(new issetMW(['funcion']))
+    ->add(new AuthMiddleware());
+    $group->get('/traerPorSeparado',\EmpleadoController::class . ':TraerPorSeparado')
+    ->add(new issetMW(['nombre']))
+    ->add(new AuthMiddleware());
+    $group->get('/traerMasVendido',\PedidoController::class . ':traerMasVendido')
+    ->add(new AuthMiddleware());
+    $group->get('/traerMenosVendido',\PedidoController::class . ':traerMenosVendido')
+    ->add(new AuthMiddleware());
+    $group->get('/traerDemorados',\TiempoController::class . ':traerEntregadosTarde')
+    ->add(new AuthMiddleware());
+    $group->get('/traerCancelados',\PedidoController::class . ':traerCancelados')
+    ->add(new AuthMiddleware());
+    $group->get('/traerMesaMasUsada',\MesaController::class . ':MostrarConMasUso')
+    ->add(new AuthMiddleware());
+    $group->get('/traerMesaMenosUsada',\MesaController::class . ':MostrarConMenosUso')
+    ->add(new AuthMiddleware());
+    $group->get('/traerMesaMasFacturada',\MesaController::class . ':MostrarMesaMasFacturada')
+    ->add(new AuthMiddleware());
+    $group->get('/traerMesaMenosFacturada',\MesaController::class . ':traerMenosFacturada')
+    ->add(new AuthMiddleware());
+    $group->get('/traerEntreFechas',\MesaController::class . ':traerEntreFechas')
+    ->add(new issetMW(['fechaUno','fechaDos','mesa']))
+    ->add(new AuthMiddleware());
+    $group->get('/traerMejoresComentarios',\EmpleadoController::class . ':traerMejoresEncuestas')
+    ->add(new AuthMiddleware());
+    $group->get('/traerPeoresComentarios',\EmpleadoController::class . ':traerPeoresEncuestas')
+    ->add(new AuthMiddleware());
+});
+
+
 $app->run();

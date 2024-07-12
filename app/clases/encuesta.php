@@ -23,7 +23,23 @@ class Encuesta{
                                                         (mesa + restaurante + mozo + cocinero) / 4.0 AS promedio
                                                         FROM encuesta
                                                         ORDER BY promedio DESC
-                                                        LIMIT 2");
+                                                        LIMIT 1");
+        $consulta->execute();
+        $encuestas = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($encuestas) {
+            return $encuestas;
+        } else {
+            return false;
+        }
+    }
+
+    public static function traerPeoresEncuestas(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT codigo_mesa, mesa, restaurante, mozo, cocinero, descripcion, 
+                                                        (mesa + restaurante + mozo + cocinero) / 4.0 AS promedio
+                                                        FROM encuesta
+                                                        ORDER BY promedio ASC
+                                                        LIMIT 1");
         $consulta->execute();
         $encuestas = $consulta->fetchAll(PDO::FETCH_ASSOC);
         if ($encuestas) {

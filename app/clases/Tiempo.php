@@ -116,6 +116,18 @@ class Tiempo
             return false;
         }
     }  
+
+    public static function traerEntregadosTarde(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT *FROM control_tiempo WHERE estado = 'entregado con demora'");
+        $consulta->execute();
+        $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($pedidos) {
+            return $pedidos;
+        } else {
+            return false;
+        }
+    }  
 }
 
 ?>

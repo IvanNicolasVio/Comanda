@@ -139,9 +139,65 @@ class MesaController {
         if($mesa){
             $response->getBody()->write(json_encode('La mesa mas usada es: ' . $mesa['codigo_mesa'] . ' cantidad de usos: ' . $mesa['usos']));
         }else{
-            $response->getBody()->write(json_encode(array('Error!' => 'No hay mesas en uso')));
+            $response->getBody()->write(json_encode(array('Error!' => 'No se han utilizado mesas')));
         }
         return $response->withHeader('Content-Type', 'application/json');
     }
 
+    public function MostrarConMenosUso(Request $request, Response $response, $args) {
+        $mesa = Pedido::obtenerMesaMenosUsada();
+        if($mesa){
+            $response->getBody()->write(json_encode('La mesa menos usada es: ' . $mesa['codigo_mesa'] . ' cantidad de usos: ' . $mesa['usos']));
+        }else{
+            $response->getBody()->write(json_encode(array('Error!' => 'No se han utilizado mesas')));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function MostrarMesaMasFacturada(Request $request, Response $response, $args) {
+        $mesa = Pedido::traerMasFacturada();
+        if($mesa){
+            $response->getBody()->write(json_encode('La mesa que mas recaudo es: ' . $mesa['codigo_mesa'] . ' cantidad $: ' . $mesa['total_facturado']));
+        }else{
+            $response->getBody()->write(json_encode(array('Error!' => 'No se han utilizado mesas')));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function traerMenosFacturada(Request $request, Response $response, $args) {
+        $mesa = Pedido::traerMenosFacturada();
+        if($mesa){
+            $response->getBody()->write(json_encode('La mesa que menos recaudo es: ' . $mesa['codigo_mesa'] . ' cantidad $: ' . $mesa['total_facturado']));
+        }else{
+            $response->getBody()->write(json_encode(array('Error!' => 'No se han utilizado mesas')));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public static function traerEntreFechas(Request $request, Response $response, $args){
+        $params = $request->getQueryParams();
+        $codigoMesa = $params['mesa'];
+        $fechaUno = $params['fechaUno'];
+        $fechaDos = $params['fechaDos'];
+        $fechaUno = date('Y-m-d', strtotime($fechaUno));
+        $fechaDos = date('Y-m-d', strtotime($fechaDos));
+        $checkMesa = Mesa::TraerUna($codigoMesa);
+        if($checkMesa){
+            if($fechaUno > $fechaDos){
+                $response->getBody()->write(json_encode(array('Error!' => 'La fecha uno debe ser menor a la fecha dos')));
+                return $response->withHeader('Content-Type', 'application/json');
+            }
+            $mesas = Pedido::traerFacturaEntreFechas($fechaUno,$fechaDos,$codigoMesa);
+            if($mesas){
+                $response->getBody()->write(json_encode($mesas));
+            }else{
+                $response->getBody()->write(json_encode(array('Error!' => 'No hay movimientos en ese periodo de tiempo')));
+                
+            }
+        }else{
+            $response->getBody()->write(json_encode(array('Error!' => 'La mesa no existe')));
+        }
+
+        return $response->withHeader('Content-Type', 'application/json');
+    }
 }

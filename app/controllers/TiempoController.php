@@ -55,4 +55,15 @@ class TiempoController {
         return $response->withHeader('Content-Type', 'application/json');
     }
 
+    public static function traerEntregadosTarde(Request $request, Response $response, $args)
+    {
+        $pedidos = Tiempo::traerEntregadosTarde();
+        if ($pedidos) {
+            $response->getBody()->write(json_encode($pedidos));
+        } else {
+            $response->getBody()->write(json_encode(array('No existen pedidos con demora')));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
 }
