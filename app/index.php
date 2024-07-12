@@ -146,7 +146,6 @@ $app->group('/encuesta', function(RouteCollectorProxy $group){
     $group->post('/llenar',\ClienteController::class . ':LlenarEncuesta')
     ->add(new CheckNumsMW(['mesa','restaurante','mozo','cocinero']))
     ->add(new issetMW(['codigo_mesa','codigo_pedido','mesa','restaurante','mozo','cocinero','descripcion']));
-
     $group->get('/traerMejores',\EmpleadoController::class . ':traerMejoresEncuestas')
     ->add(new AuthMiddleware(['Socio']));
 });

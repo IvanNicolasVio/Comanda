@@ -2044,6 +2044,463 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Traer por funcion",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerPorSector?funcion=Bartender",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerPorSector"
+							],
+							"query": [
+								{
+									"key": "funcion",
+									"value": "Bartender"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer por funcion grupo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerPorEmpleado?funcion=Cocinero",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerPorEmpleado"
+							],
+							"query": [
+								{
+									"key": "funcion",
+									"value": "Cocinero"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer por empleado",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerPorSeparado?nombre=Butcher",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerPorSeparado"
+							],
+							"query": [
+								{
+									"key": "nombre",
+									"value": "Butcher"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer mas vendido",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerMasVendido",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerMasVendido"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer menos vendido",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerMenosVendido",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerMenosVendido"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer demorados",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerDemorados",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerDemorados"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer cancelados",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerCancelados",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerCancelados"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer mesa mas usada",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerMesaMasUsada",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerMesaMasUsada"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer mesa menos usada",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerMesaMenosUsada",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerMesaMenosUsada"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer mesa mas cara",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerMesaMasFacturada",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerMesaMasFacturada"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer mesa mas barata",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerMesaMenosFacturada",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerMesaMenosFacturada"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer mesa entre fechas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerEntreFechas?fechaUno=2024-07-10&fechaDos=2024-07-12&mesa=8a9fa",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerEntreFechas"
+							],
+							"query": [
+								{
+									"key": "fechaUno",
+									"value": "2024-07-10"
+								},
+								{
+									"key": "fechaDos",
+									"value": "2024-07-12"
+								},
+								{
+									"key": "mesa",
+									"value": "8a9fa"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer mejor comentario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerMejoresComentarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerMejoresComentarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer peor comentario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA4MTUxMTYsImV4cCI6MTcyMDkwMTUxNiwiYXVkIjoiY2JjMjVhNjYwNmI1MDM0MGQ3YzUxNTU5ZWU3MDE3MGZiMGM4YTFkNSIsImRhdGEiOnsiaWQiOjEwLCJub21icmUiOiJJdmFuIiwiY29udHJhc2VuaWEiOiIxMjM0IiwiZnVuY2lvbiI6IkFkbWluIiwiZmVjaGFfYWx0YSI6IjIwMjQtMDYtMjIiLCJmZWNoYV9iYWphIjoiMDAwMC0wMC0wMCJ9LCJhcHAiOiJDb21hbmRhIn0.Z7zF3sTC8pDrHJomEpWtFiMK7pehYK81dS-RhKLusMY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:666/admin/traerPeoresComentarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"admin",
+								"traerPeoresComentarios"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
