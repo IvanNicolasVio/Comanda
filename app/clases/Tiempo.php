@@ -21,7 +21,8 @@ class Tiempo
         } else {
             return false;
         }
-    }   
+    }  
+    
 
     public static function ingresarTiempo($codigo,$tiempo){
         date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -86,6 +87,15 @@ class Tiempo
             $consulta->bindValue(':codigo', $codigo, PDO::PARAM_STR);
             $consulta->execute();
         }
+    }
+
+    public static function cancelarPorMesa($mesa)
+    {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("UPDATE control_tiempo SET estado = 'cancelado' WHERE mesa = :mesa AND estado IS NULL" );
+        $consulta->bindValue(':mesa', $mesa, PDO::PARAM_STR);
+        $consulta->execute();
+        
     }
 }
 

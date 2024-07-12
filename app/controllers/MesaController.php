@@ -110,6 +110,7 @@ class MesaController {
         if($mesa){
             Mesa::CambiarEstado($codigoMesa, $estado);
             Pedido::cancelarPedidos($codigoMesa);
+            Tiempo::cancelarPorMesa($codigoMesa);
             $response->getBody()->write(json_encode(array('Status' => 'Mesa ' . $codigoMesa . ' cerrada con exito')));
         }else{
             $response->getBody()->write(json_encode(array('Error!' => 'Mesa no encontrada')));
