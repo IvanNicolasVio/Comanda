@@ -54,16 +54,16 @@ class Pedido{
         }
     }
 
-    public static function MostrarPendientes(){
+    public static function MostrarPendientes() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM pedidos_secundario WHERE estado = 'pendiente' ");
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT ps.codigo, p.nombre AS nombre_producto, ps.cantidad, ps.estado
+            FROM pedidos_secundario AS ps
+            INNER JOIN productos AS p ON ps.id_producto = p.id
+            WHERE ps.estado = 'pendiente'");
         $consulta->execute();
         $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
-        if ($pedidos) {
-            return $pedidos;
-        } else {
-            return false;
-        }
+        
+        return $pedidos;
     }
 
     public static function obtenerPedidosPorFuncion($funcion){

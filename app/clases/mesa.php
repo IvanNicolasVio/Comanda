@@ -106,4 +106,17 @@ class Mesa{
         $consulta->execute();
         return $consulta->rowCount();
     }
+
+    public static function checkUtilizada($codigo){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM mesas WHERE codigo = :codigo and estado != 'cerrada'");
+        $consulta->bindValue(':codigo', $codigo, PDO::PARAM_STR);
+        $consulta->execute();
+        $mesa = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($mesa) {
+            return $mesa;
+        } else {
+            return false;
+        }
+    }
 }

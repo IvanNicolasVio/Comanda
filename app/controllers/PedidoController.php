@@ -16,10 +16,16 @@ class PedidoController {
         $nombre_cliente = $params['nombre'];
         $codigo_mesa = $params['mesa'];
         $productos = $params['pedido'];
-        $numeroPedido = Pedido::Cargar($nombre_cliente,$codigo_mesa,$productos);
-        Tiempo::cargarPedido($codigo_mesa,$numeroPedido);
-        MesaController::Actualizar($params);
-        $response->getBody()->write(json_encode(array('Status'=> 'Pedido numero: ' . $numeroPedido . ' cargado con exito')));
+        $mesaAVerificar = Mesa::checkUtilizada($codigo_mesa);
+        if($mesaAVerificar){
+            $response->getBody()->write(json_encode(array('Status'=> 'La mesa: ' . $codigo_mesa . ' esta siendo utilizada')));
+        }else{
+            $numeroPedido = Pedido::Cargar($nombre_cliente,$codigo_mesa,$productos);
+            Tiempo::cargarPedido($codigo_mesa,$numeroPedido);
+            MesaController::Actualizar($params);
+            $response->getBody()->write(json_encode(array('Status'=> 'Pedido numero: ' . $numeroPedido . ' cargado con exito')));
+        }
+        
         return $response->withHeader('Content-Type', 'application/json');
     }
 
