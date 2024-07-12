@@ -1,7 +1,0 @@
-JuanPerez,password123,Bartender
-MariaLopez,password456,Mozo
-CarlosGarcia,password789,Cervecero
-AnaMartinez,password101,Mozo
-PedroRodriguez,password102,Socio
-Acru,password456,Mozo
-Hugo,password456,Cocinero
