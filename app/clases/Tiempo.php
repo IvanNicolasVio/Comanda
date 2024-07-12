@@ -97,6 +97,25 @@ class Tiempo
         $consulta->execute();
         
     }
+
+    public static function traerPedidoYTiempo(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT 
+                                                            ct.mesa,
+                                                            ct.codigo,
+                                                            ct.tiempo_estimado
+                                                        FROM control_tiempo ct
+                                                        INNER JOIN pedidos_principal pp
+                                                        ON ct.codigo = pp.codigo
+                                                        WHERE pp.estado = 'con cliente esperando pedido'");
+        $consulta->execute();
+        $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($pedidos) {
+            return $pedidos;
+        } else {
+            return false;
+        }
+    }  
 }
 
 ?>

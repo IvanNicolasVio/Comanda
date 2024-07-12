@@ -67,10 +67,31 @@ class PedidoController {
         return $response->withHeader('Content-Type', 'application/json');
     }
 
+    public function TraerListos(Request $request, Response $response, $args) {
+        $pedidos = Pedido::MostrarListos();
+        if($pedidos){
+            $pedidos = json_encode($pedidos);
+            $response->getBody()->write($pedidos);
+        }else{
+            $response->getBody()->write(json_encode(array('Status'=> 'No hay pedidos listos'))); 
+        }
+
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
     public function TraerPorFuncion(Request $request, Response $response, $args) {
         $data = $request->getAttribute('jwt_data');
         $funcion = $data->funcion;
         $pedidos = Pedido::obtenerPedidosPorFuncion($funcion);
+        $pedidos = json_encode($pedidos);
+        $response->getBody()->write($pedidos);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function TraerPorEnPreparacion(Request $request, Response $response, $args) {
+        $data = $request->getAttribute('jwt_data');
+        $funcion = $data->funcion;
+        $pedidos = Pedido::obtenerPedidosEnPreparacion($funcion);
         $pedidos = json_encode($pedidos);
         $response->getBody()->write($pedidos);
         return $response->withHeader('Content-Type', 'application/json');

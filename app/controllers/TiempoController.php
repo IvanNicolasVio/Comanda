@@ -44,4 +44,15 @@ class TiempoController {
         return $response->withHeader('Content-Type', 'application/json');
     }
 
+    public static function traerPedidosYTiempo(Request $request, Response $response, $args)
+    {
+        $pedidos = Tiempo::traerPedidoYTiempo();
+        if ($pedidos) {
+            $response->getBody()->write(json_encode($pedidos));
+        } else {
+            $response->getBody()->write(json_encode(array('No existen pedidos')));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
 }

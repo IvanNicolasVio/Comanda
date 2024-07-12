@@ -66,6 +66,18 @@ class Pedido{
         return $pedidos;
     }
 
+    public static function MostrarListos() {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT ps.codigo, p.nombre AS nombre_producto, ps.cantidad, ps.estado
+            FROM pedidos_secundario AS ps
+            INNER JOIN productos AS p ON ps.id_producto = p.id
+            WHERE ps.estado = 'listo para servir'");
+        $consulta->execute();
+        $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        
+        return $pedidos;
+    }
+
     public static function obtenerPedidosPorFuncion($funcion){
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         switch($funcion){
@@ -89,6 +101,40 @@ class Pedido{
         $sql = "SELECT  ps.codigo, ps.id_producto, pr.nombre, ps.cantidad, pr.sector 
                 FROM pedidos_secundario ps
                 INNER JOIN productos pr ON ps.id_producto = pr.id" . $sentencia . "ps.estado = 'pendiente'";
+    
+        $consulta = $objetoAccesoDato->RetornarConsulta($sql);
+        $consulta->execute();
+        $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if (count($pedidos) > 0) {
+            return $pedidos;
+        } else {
+            return array('Status' => 'No hay pedidos para la funcion especificada');
+        }
+    }
+
+    public static function obtenerPedidosEnPreparacion($funcion){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        switch($funcion){
+            case 'Cocinero':
+                $sentencia = " WHERE pr.sector = 'candybar' OR pr.sector = 'cocina' AND ";
+                break;
+    
+            case 'Bartender':
+                $sentencia = " WHERE pr.sector = 'barra' AND ";
+                break;
+    
+            case 'Cervecero':
+                $sentencia = " WHERE pr.sector = 'chopera' AND ";
+                break;
+    
+            case 'Socio':
+                $sentencia = " WHERE ";
+                break;
+    
+        }
+        $sql = "SELECT  ps.codigo, ps.id_producto, pr.nombre, ps.cantidad, pr.sector 
+                FROM pedidos_secundario ps
+                INNER JOIN productos pr ON ps.id_producto = pr.id" . $sentencia . "ps.estado = 'en preparacion'";
     
         $consulta = $objetoAccesoDato->RetornarConsulta($sql);
         $consulta->execute();
@@ -271,6 +317,22 @@ class Pedido{
             return array('Status' => 'Pedido cancelado');
         } else {
             return array('Status' => 'No hay pedidos para cancelar');
+        }
+    }
+
+    public static function obtenerMesaMasUsada() {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT codigo_mesa, COUNT(*) AS usos
+                                                        FROM pedidos_principal
+                                                        GROUP BY codigo_mesa
+                                                        ORDER BY usos DESC
+                                                        LIMIT 1");
+        $consulta->execute();
+        $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($resultado) {
+            return $resultado;
+        } else {
+            return false;
         }
     }
 }

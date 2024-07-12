@@ -16,4 +16,20 @@ class Encuesta{
         $consulta->execute();
         return $objetoAccesoDato->RetornarUltimoIdInsertado();
     }
+
+    public static function traerMejoresEncuestas(){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT codigo_mesa, mesa, restaurante, mozo, cocinero, descripcion, 
+                                                        (mesa + restaurante + mozo + cocinero) / 4.0 AS promedio
+                                                        FROM encuesta
+                                                        ORDER BY promedio DESC
+                                                        LIMIT 2");
+        $consulta->execute();
+        $encuestas = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($encuestas) {
+            return $encuestas;
+        } else {
+            return false;
+        }
+    }
 }

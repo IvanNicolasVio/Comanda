@@ -133,4 +133,15 @@ class MesaController {
         }
         return $response->withHeader('Content-Type', 'application/json');
     }
+
+    public function MostrarConMasUso(Request $request, Response $response, $args) {
+        $mesa = Pedido::obtenerMesaMasUsada();
+        if($mesa){
+            $response->getBody()->write(json_encode('La mesa mas usada es: ' . $mesa['codigo_mesa'] . ' cantidad de usos: ' . $mesa['usos']));
+        }else{
+            $response->getBody()->write(json_encode(array('Error!' => 'No hay mesas en uso')));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
 }

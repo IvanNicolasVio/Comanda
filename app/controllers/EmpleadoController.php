@@ -1,6 +1,6 @@
 <?php
 include_once './clases/empleado.php';
-
+include_once './clases/encuesta.php';
 include_once './clases/AutenticadorJWT.php';
 
 use Slim\Psr7\Response;
@@ -169,6 +169,21 @@ class EmpleadoController {
             }else{
                 $response->getBody()->write(json_encode(array('Error!'=>'El empleado no existe')));
             }
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function traerMejoresEncuestas(Request $request, Response $response, $args){
+        $encuestas = Encuesta::traerMejoresEncuestas();
+        $encuestaArray = array();
+        if($encuestas){
+            foreach($encuestas as $encuesta){
+                $item = "Mesa N: " . $encuesta['codigo_mesa'] ." / Mesa: " . $encuesta['mesa'] . ' Restaurante: ' . $encuesta['restaurante'] . " Mozo: " . $encuesta['mozo'] . ' Cocinero: ' . $encuesta['cocinero'] . ' -> ' . $encuesta['descripcion'];
+                $encuestaArray[] = $item;
+            }
+            $response->getBody()->write(json_encode($encuestaArray));
+        }else{
+            $response->getBody()->write(json_encode(array('Error!'=>'No hay encuestas')));
         }
         return $response->withHeader('Content-Type', 'application/json');
     }
