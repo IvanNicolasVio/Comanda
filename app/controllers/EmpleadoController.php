@@ -153,4 +153,23 @@ class EmpleadoController {
         }
         return $response;
     }
+
+    public function TraerIngresos(Request $request, Response $response, $args){
+        $params = $request->getQueryParams();
+        $usuario = $params['nombre'];
+        $empleado = Empleado::TraerIngresos($usuario);
+        if($empleado){
+            $empleado = json_encode($empleado);
+            $response->getBody()->write($empleado);
+            
+        }else{
+            $checkEmpleado = Empleado::CheckNombre($usuario);
+            if($checkEmpleado){
+                $response->getBody()->write(json_encode(array('Error!'=>'El empleado no registra ingresos')));
+            }else{
+                $response->getBody()->write(json_encode(array('Error!'=>'El empleado no existe')));
+            }
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
 }

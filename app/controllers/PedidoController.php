@@ -3,6 +3,7 @@
 include_once './clases/pedido.php';
 include_once './clases/empleado.php';
 include_once './clases/mesa.php';
+include_once './clases/Tiempo.php';
 include_once './controllers/MesaController.php';
 include_once './controllers/ImagenController.php';
 
@@ -12,7 +13,11 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class PedidoController {
     public function crear(Request $request, Response $response, $args) {
         $params = $request->getParsedBody();
-        $numeroPedido = Pedido::Cargar($params);
+        $nombre_cliente = $params['nombre'];
+        $codigo_mesa = $params['mesa'];
+        $productos = $params['pedido'];
+        $numeroPedido = Pedido::Cargar($nombre_cliente,$codigo_mesa,$productos);
+        Tiempo::cargarPedido($codigo_mesa,$numeroPedido);
         MesaController::Actualizar($params);
         $response->getBody()->write(json_encode(array('Status'=> 'Pedido numero: ' . $numeroPedido . ' cargado con exito')));
         return $response->withHeader('Content-Type', 'application/json');
@@ -70,8 +75,10 @@ class PedidoController {
         $params = $request->getQueryParams();
         $id_producto = $params['id_producto'];
         $codigo = $params['codigo'];
+        $tiempo = $params['tiempo'];
         $funcion = $data->funcion;
         $id_empleado = $data->id;
+        Tiempo::ingresarTiempo($codigo,$tiempo);
         $pedidos = Pedido::modificarPedido($funcion, $id_producto, $id_empleado, $codigo);
         $pedidos = json_encode($pedidos);
         $response->getBody()->write($pedidos);
@@ -116,6 +123,7 @@ class PedidoController {
             }
             else if ($todosListos) {
                 Pedido::entregarPedidos($codigo);
+                Tiempo::comparar($codigo);
                 $codigoMesa = Pedido::mostrarMesaXCodigoPedido($codigo);
                 $codigoMesa = $codigoMesa['codigo_mesa'];
                 $estado = 'con cliente comiendo';
@@ -136,6 +144,7 @@ class PedidoController {
         $codigo = $params['codigo'];
         $id_producto = $params['id_producto'];
         $status = Pedido::cancelarUnPedido($id_producto,$codigo);
+        Tiempo::cancelar($codigo);
         $response->getBody()->write(json_encode($status));
         return $response->withHeader('Content-Type', 'application/json');
     }

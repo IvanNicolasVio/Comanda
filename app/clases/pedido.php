@@ -1,7 +1,7 @@
 <?php
 
 include_once './db/AccesoDatos.php';
-include_once './clases/ControlTiempo.php';
+include_once './controllers/TiempoController.php';
 include_once './clases/producto.php';
 
 class Pedido{
@@ -11,14 +11,11 @@ class Pedido{
     public function __construct()
     {
         $this->codigo = substr(bin2hex(random_bytes(5)), 0, 5);
-        $this->fechaPedido = Fecha::DarFechaConHora();
+        $this->fechaPedido = TiempoController::DarFechaConHora();
     }
 
-    public static function Cargar($params){
+    public static function Cargar($nombre_cliente,$codigo_mesa,$productos){
         $pedido = new Pedido();
-        $nombre_cliente = $params['nombre'];
-        $codigo_mesa = $params['mesa'];
-        $productos = $params['pedido'];
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
 
         $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into pedidos_principal (codigo,codigo_mesa,nombre,estado,fecha_pedido)values(:codigo,:codigo_mesa,:nombre,:estado,:fecha_pedido)");
@@ -47,7 +44,7 @@ class Pedido{
 
     public static function MostrarPedidos(){
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM pedidos");
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM pedidos_secundario");
         $consulta->execute();
         $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
         if ($pedidos) {
@@ -96,7 +93,6 @@ class Pedido{
         $consulta = $objetoAccesoDato->RetornarConsulta($sql);
         $consulta->execute();
         $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
-    
         if (count($pedidos) > 0) {
             return $pedidos;
         } else {

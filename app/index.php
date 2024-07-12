@@ -6,6 +6,7 @@ require_once '../app/controllers/MesaController.php';
 require_once '../app/controllers/ProductoController.php';
 require_once '../app/controllers/PedidoController.php';
 require_once '../app/controllers/ClienteController.php';
+require_once '../app/controllers/TiempoController.php';
 require_once '../app/middleware/CheckNombreMW.php';
 require_once '../app/middleware/CheckMesaMW.php';
 require_once '../app/middleware/CheckRolMW.php';
@@ -55,6 +56,11 @@ $app->group('/empleados', function(RouteCollectorProxy $group){
         ->add(new AuthMiddleware(['Socio']));
     $group->get('/descargarCsv',\EmpleadoController::class . ':DescargarMuchosEmpleados')
         ->add(new AuthMiddleware(['Socio']));
+
+    $group->get('/ingresos',\EmpleadoController::class . ':TraerIngresos')
+    ->add(new issetMW(['nombre']))
+    ->add(new AuthMiddleware(['Socio']));
+
 });
 
 $app->group('/mesas', function(RouteCollectorProxy $group){
@@ -120,7 +126,6 @@ $app->group('/pedidos', function(RouteCollectorProxy $group){
 
     $group->get('/traerTodos',\PedidoController::class . ':TraerTodos')
         ->add(new AuthMiddleware(['Socio','Mozo']));
-
     $group->get('/traerPendientes',\PedidoController::class . ':TraerPendientes')
         ->add(new AuthMiddleware(['Socio','Mozo']));
 
@@ -128,7 +133,8 @@ $app->group('/pedidos', function(RouteCollectorProxy $group){
         ->add(new AuthMiddleware(['Socio','Bartender','Cervecero','Cocinero']));
         
     $group->put('/preparar',\PedidoController::class . ':prepararPedido')
-        ->add(new issetMW(['codigo','id_producto']))
+        ->add(new CheckIntMW(['tiempo']))
+        ->add(new issetMW(['codigo','id_producto','tiempo']))
         ->add(new AuthMiddleware(['Socio','Bartender','Cervecero','Cocinero']));
 
     $group->put('/finalizar',\PedidoController::class . ':finalizarPedido')
@@ -142,6 +148,10 @@ $app->group('/pedidos', function(RouteCollectorProxy $group){
     $group->put('/cancelar',\PedidoController::class . ':cancelarUnPedido')
     ->add(new issetMW(['codigo','id_producto']))
     ->add(new AuthMiddleware(['Socio','Mozo']));
+
+    $group->get('/consultar',\TiempoController::class . ':obtenerTiempoEstimado')
+    ->add(new issetMW(['pedido']));
+
 });
 
 $app->group('/encuesta', function(RouteCollectorProxy $group){

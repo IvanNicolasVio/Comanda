@@ -54,6 +54,7 @@ class MesaController {
         if ($mesa) {
             $pedidos = Pedido::mostrarPedidosXCodigo($codigoPedido);
             $itemNumber = 1;
+            $total = 0;
             foreach ($pedidos as $pedido) {
                 if ($pedido['estado'] == 'cancelado') {
                     continue;
@@ -67,6 +68,7 @@ class MesaController {
                     if ($producto) {
                         $itemDescription = "item {$itemNumber}, " . $producto['nombre'] . ' cantidad: ' . $pedido['cantidad'] . ' $' . $pedido['valor_total'];
                         $cuenta[] = $itemDescription;
+                        $total = $total + $pedido['valor_total'];
                         $itemNumber++;
                     } else {
                         $response->getBody()->write(json_encode(array('Error!' => 'Producto no encontrado')));
@@ -74,6 +76,8 @@ class MesaController {
                     }
                 }
             }
+            $totalCuenta = "TOTAL: $" . $total;
+            $cuenta[] = $totalCuenta;
             Mesa::CambiarEstado($codigoMesa, $estado);
             $response->getBody()->write(json_encode(array('cuenta' => $cuenta)));
             return $response->withHeader('Content-Type', 'application/json');

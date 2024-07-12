@@ -1,7 +1,7 @@
 <?php
 
 include_once './db/AccesoDatos.php';
-include_once './clases/ControlTiempo.php';
+include_once './controllers/TiempoController.php';
 
 class Empleado{
     public $nombre;
@@ -15,7 +15,7 @@ class Empleado{
         $this->nombre = $nombre;
         $this->contrasenia = $contrasenia;
         $this->funcion = $funcion;
-        $this->fechaAlta = Fecha::DarFechaActual();
+        $this->fechaAlta = TiempoController::DarFechaActual();
         $this->fechaBaja = "";
     }
 
@@ -49,7 +49,7 @@ class Empleado{
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objetoAccesoDato->RetornarConsulta("UPDATE empleados SET fecha_baja = :fecha_baja WHERE nombre = :nombre");
         $consulta->bindValue(':nombre', $nombre, PDO::PARAM_STR);
-        $consulta->bindValue(':fecha_baja', Fecha::DarFechaActual());
+        $consulta->bindValue(':fecha_baja', TiempoController::DarFechaActual());
         $consulta->execute();
     }
     
@@ -121,7 +121,20 @@ class Empleado{
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         $consulta = $objetoAccesoDato->RetornarConsulta("INSERT into ingresos (nombre,fecha)values(:nombre,:fecha)");
         $consulta->bindValue(':nombre', $empleado['nombre'], PDO::PARAM_STR);
-        $consulta->bindValue(':fecha',Fecha:: DarFechaConHora());
+        $consulta->bindValue(':fecha',TiempoController:: DarFechaConHora());
         $consulta->execute();
+    }
+
+    public static function TraerIngresos($usuario){
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM ingresos WHERE nombre = ?");
+        $consulta->bindValue(1, $usuario, PDO::PARAM_STR);
+        $consulta->execute();
+        $empleado = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        if ($empleado) {
+            return $empleado;
+        } else {
+            return false;
+        }
     }
 }
